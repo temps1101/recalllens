@@ -62,7 +62,7 @@ app.build_configurations.each do |config|
     "INFOPLIST_FILE" => "RecallLens/Info.plist",
     "IPHONEOS_DEPLOYMENT_TARGET" => "17.0",
     "MARKETING_VERSION" => "1.0",
-    "PRODUCT_BUNDLE_IDENTIFIER" => "town.tsuru.recalllens",
+    "PRODUCT_BUNDLE_IDENTIFIER" => ENV.fetch("RECALL_LENS_BUNDLE_IDENTIFIER", "town.tsuru.recalllens"),
     "PRODUCT_NAME" => "$(TARGET_NAME)",
     "SWIFT_OBJC_BRIDGING_HEADER" => "RecallLens/RecallLens-Bridging-Header.h",
     "SWIFT_VERSION" => "5.0",

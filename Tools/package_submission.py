@@ -15,7 +15,7 @@ def main():
     files = {}
     def add(path, name=None):
         files[name or str(path.relative_to(ROOT))] = path.read_bytes()
-    for name in ['README.md', 'LICENSE', '.gitignore', 'experiments/README.md', 'experiments/requirements.txt',
+    for name in ['README.md', 'LICENSE', 'SECURITY.md', '.gitignore', 'experiments/README.md', 'experiments/requirements.txt',
                  'experiments/test_metrics.py', 'experiments/test_calibration.py', 'Config/Cloud.xcconfig.example',
                  'aws/Dockerfile', 'aws/.dockerignore', 'aws/README.md', 'aws/requirements.txt',
                  'aws/handler.py', 'aws/sharing.py', 'aws/test_handler.py', 'aws/test_sharing.py', 'aws/template.yaml']:
