@@ -1,4 +1,4 @@
-# Recall Lens — Devpost submission copy
+# Recalllens — Devpost submission copy
 
 ## One-line description
 
@@ -6,11 +6,11 @@ A private iOS camera that uses OpenCV 5 and AWS to turn a real-world view into t
 
 ## Inspiration
 
-Photo libraries make images easy to retrieve but detach them from the viewpoints that gave them meaning. Recall Lens explores a different interaction: a memory becomes available when the user physically returns the camera to the corresponding visible scene.
+Photo libraries make images easy to retrieve but detach them from the viewpoints that gave them meaning. Recalllens explores a different interaction: a memory becomes available when the user physically returns the camera to the corresponding visible scene.
 
 ## What it does
 
-The user captures a photograph inside Recall Lens. Later, the application compares the live camera view with locally stored scene signatures. Owner photos use an additional AWS verification step. Matching photos appear as previews; a deliberately opened photo remains until manually closed.
+The user captures a photograph inside Recalllens. Later, the application compares the live camera view with locally stored scene signatures. Owner photos use an additional AWS verification step. Matching photos appear as previews; a deliberately opened photo remains until manually closed.
 
 Each capture opens a full-screen review with Save, Share and Discard. Share saves the photo and copies a sharing link. Anyone with an installed app can receive the photo without an account; the receipt reveals no preview. A representative thumbnail appears when the scene matches locally; the viewer identifies received photos. AWS stores and delivers the explicitly shared photos across devices.
 
@@ -55,7 +55,7 @@ Use `docs/figures/photo-stress-test.png`, `docs/figures/natural-pair-audit.png` 
 
 ## Limitations and responsible use
 
-ORB depends on textured, stable scenes. Blur, occlusion, low texture, repeated patterns, strong lighting changes, and major viewpoint changes can reduce accuracy. Recall Lens recognizes visual correspondence, not identity or geographic proof. It is not suitable for access control, surveillance, or safety-critical authentication.
+ORB depends on textured, stable scenes. Blur, occlusion, low texture, repeated patterns, strong lighting changes, and major viewpoint changes can reduce accuracy. Recalllens recognizes visual correspondence, not identity or geographic proof. It is not suitable for access control, surveillance, or safety-critical authentication.
 
 ## What's next
 

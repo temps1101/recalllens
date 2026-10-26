@@ -18,7 +18,7 @@ Every capture opens Save / Share / Discard. Until Save or Share is chosen, the d
 
 The existing API/Lambda gains sharing routes and a private encrypted S3 bucket. Uploads require the bundled demo token; downloads require possession of the random share ID. No account, message, friend list or public discovery feed is added. The server strips metadata and enforces a 30-day retrieval deadline. Stored objects are cleaned up by lifecycle rules; downloaded copies are not remotely revoked.
 
-The HTTPS page contains no picture and opens a custom URL scheme. Automatic launch depends on browser policy; a visible button is always provided. Universal Links require a separately configured associated domain/signing setup and are not claimed in this build. A recipient must already have an installed Recall Lens build.
+The HTTPS page contains no picture and opens a custom URL scheme. Automatic launch depends on browser policy; a visible button is always provided. Universal Links require a separately configured associated domain/signing setup and are not claimed in this build. A recipient must already have an installed Recalllens build.
 
 ## Scope of verification
 

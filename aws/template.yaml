@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: Ephemeral OpenCV 5 geometric verification for Recall Lens.
+Description: Ephemeral OpenCV 5 geometric verification for Recalllens.
 
 Parameters:
   ApiToken:
@@ -12,7 +12,7 @@ Parameters:
     Type: String
     AllowedPattern: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
     ConstraintDescription: Enter an email address for AWS cost alerts.
-    Description: Email address that receives the Recall Lens cost alerts.
+    Description: Email address that receives the Recalllens cost alerts.
 
 Resources:
   VerificationApi:

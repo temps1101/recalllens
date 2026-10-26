@@ -28,7 +28,7 @@ def inline(text):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--fonts', type=Path, required=True)
-    parser.add_argument('--output', type=Path, default=ROOT / 'output/pdf/Recall-Lens-Technical-Report.pdf')
+    parser.add_argument('--output', type=Path, default=ROOT / 'output/pdf/Recalllens-Technical-Report.pdf')
     args = parser.parse_args()
     for name, filename in [('DejaVu', 'DejaVuSans.ttf'), ('DejaVuBold', 'DejaVuSans-Bold.ttf'), ('DejaVuMono', 'DejaVuSansMono.ttf')]:
         pdfmetrics.registerFont(TTFont(name, str(args.fonts / filename)))
@@ -88,9 +88,9 @@ def main():
     def footer(canvas, doc):
         canvas.setFont('DejaVu', 8)
         canvas.setFillColor(colors.HexColor('#657886'))
-        canvas.drawString(54, 30, 'Recall Lens | Technical report')
+        canvas.drawString(54, 30, 'Recalllens | Technical report')
         canvas.drawRightString(541, 30, str(doc.page))
-    doc = SimpleDocTemplate(str(args.output), pagesize=(595, 842), leftMargin=54, rightMargin=54, topMargin=43, bottomMargin=49, title='Recall Lens - Technical Report', author='Recall Lens')
+    doc = SimpleDocTemplate(str(args.output), pagesize=(595, 842), leftMargin=54, rightMargin=54, topMargin=43, bottomMargin=49, title='Recalllens - Technical Report', author='Recalllens')
     doc.build(story, onFirstPage=footer, onLaterPages=footer)
     print(args.output)
 

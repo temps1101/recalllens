@@ -10,8 +10,8 @@ project.root_object.attributes["LastUpgradeCheck"] = "2700"
 project.root_object.development_region = "en"
 project.root_object.known_regions = ["en", "ja"]
 
-app = project.new_target(:application, "RecallLens", :ios, "17.0")
-app.product_name = "RecallLens"
+app = project.new_target(:application, "Recalllens", :ios, "17.0")
+app.product_name = "Recalllens"
 
 sources_group = project.main_group.new_group("RecallLens", "RecallLens")
 source_files = Dir.glob(File.join(root, "RecallLens", "**", "*.{swift,mm}")).sort

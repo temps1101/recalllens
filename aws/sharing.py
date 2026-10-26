@@ -78,10 +78,10 @@ def handle(event, path, method, upload_authorized):
         # Link previews never contain the shared photo or its retrieval endpoint.
         html = '''<!doctype html><html lang="ja"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><title>Recall Lens — 写真を受け取る</title>
+<meta name="robots" content="noindex,nofollow"><title>Recalllens — 写真を受け取る</title>
 <style>body{background:#101c20;color:#eef6f4;font-family:system-ui;max-width:420px;margin:18vh auto;padding:28px;text-align:center}a{display:block;background:#80e2c3;color:#102721;padding:18px;border-radius:18px;text-decoration:none;font-weight:600}p{line-height:1.8;color:#bdd0cc}</style>
-<h1>風景に、写真が届いています。</h1><p>Recall Lensで受け取ると、その風景にカメラを向けたときに写真が現れます。</p>
-<a href="recalllens://receive/TOKEN">Recall Lensで受け取る</a>
+<h1>風景に、写真が届いています。</h1><p>Recalllensで受け取ると、その風景にカメラを向けたときに写真が現れます。</p>
+<a href="recalllens://receive/TOKEN">Recalllensで受け取る</a>
 <p>アプリがインストールされたiPhoneで開いてください。開かない場合は上のボタンを押してください。</p>
 <script>if(/iPhone|iPad|iPod/.test(navigator.userAgent)){location.href='recalllens://receive/TOKEN';}</script></html>'''.replace('TOKEN', token)
         language = {str(k).lower(): str(v) for k, v in (event.get('headers') or {}).items()}.get('accept-language', '').split(',')[0].lower()
@@ -89,9 +89,9 @@ def handle(event, path, method, upload_authorized):
             for japanese, english in {
                 'lang="ja"': 'lang="en"', '写真を受け取る': 'Receive a photo',
                 '風景に、写真が届いています。': 'A photo is waiting in this scene.',
-                'Recall Lensで受け取ると、その風景にカメラを向けたときに写真が現れます。': 'Receive it in Recall Lens, then point your camera at the matching scene to reveal it.',
-                'Recall Lensで受け取る': 'Receive in Recall Lens',
-                'アプリがインストールされたiPhoneで開いてください。開かない場合は上のボタンを押してください。': 'Open on an iPhone with Recall Lens installed. If the app does not open automatically, tap the button above.'
+                'Recalllensで受け取ると、その風景にカメラを向けたときに写真が現れます。': 'Receive it in Recalllens, then point your camera at the matching scene to reveal it.',
+                'Recalllensで受け取る': 'Receive in Recalllens',
+                'アプリがインストールされたiPhoneで開いてください。開かない場合は上のボタンを押してください。': 'Open on an iPhone with Recalllens installed. If the app does not open automatically, tap the button above.'
             }.items(): html = html.replace(japanese, english)
         return {'statusCode': 200, 'headers': {'content-type': 'text/html; charset=utf-8',
             'cache-control': 'no-store', 'referrer-policy': 'no-referrer', 'x-content-type-options': 'nosniff',

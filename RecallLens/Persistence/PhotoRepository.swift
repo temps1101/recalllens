@@ -17,13 +17,15 @@ final class PhotoRepository: @unchecked Sendable {
     init(fileManager: FileManager = .default) {
         self.fileManager = fileManager
         let support = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        let legacyRoot = support.appendingPathComponent("WeirdBoots", isDirectory: true)
-        let recallLensRoot = support.appendingPathComponent("RecallLens", isDirectory: true)
-        if !fileManager.fileExists(atPath: recallLensRoot.path),
-           fileManager.fileExists(atPath: legacyRoot.path) {
-            try? fileManager.moveItem(at: legacyRoot, to: recallLensRoot)
+        let recalllensRoot = support.appendingPathComponent("recalllens", isDirectory: true)
+        let legacyRoots = ["RecallLens", "WeirdBoots"].map {
+            support.appendingPathComponent($0, isDirectory: true)
         }
-        rootURL = recallLensRoot
+        if !fileManager.fileExists(atPath: recalllensRoot.path),
+           let existingRoot = legacyRoots.first(where: { fileManager.fileExists(atPath: $0.path) }) {
+            try? fileManager.moveItem(at: existingRoot, to: recalllensRoot)
+        }
+        rootURL = recalllensRoot
         capturesURL = rootURL.appendingPathComponent("Captures", isDirectory: true)
         indexURL = rootURL.appendingPathComponent("photo-index.json")
         try? prepareDirectories()

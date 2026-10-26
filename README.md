@@ -1,6 +1,8 @@
-# Recall Lens
+<p align="center"><img src="docs/recalllens.svg" width="180" alt="recalllens — three lowercase l marks"></p>
 
-Recall Lens is an iOS camera that uses the physical world as the key to a private photo archive. A past photograph becomes visible only when the current camera view returns to the same scene and composition.
+# Recalllens
+
+Recalllens is an iOS camera that uses the physical world as the key to a private photo archive. A past photograph becomes visible only when the current camera view returns to the same scene and composition.
 
 ## Quick start: local mode
 
@@ -18,7 +20,7 @@ RECALL_LENS_BUNDLE_IDENTIFIER=com.yourname.recalllens ruby Tools/generate_projec
 open RecallLens.xcodeproj
 ```
 
-In Xcode, select the RecallLens target, choose your Apple signing team, connect an iPhone, and press Run. A free Apple ID is sufficient for installation on your own device; TestFlight distribution requires the paid Apple Developer Program.
+In Xcode, select the Recalllens target, choose your Apple signing team, connect an iPhone, and press Run. A free Apple ID is sufficient for installation on your own device; TestFlight distribution requires the paid Apple Developer Program.
 
 The matching pipeline uses OpenCV 5.0.0 throughout:
 
@@ -57,7 +59,7 @@ ruby Tools/generate_project.rb
 
 Set `RECALL_LENS_BUNDLE_IDENTIFIER` when you need a unique identifier. Set `RECALL_LENS_DEVELOPMENT_TEAM` to generate a project with a signing-team ID. The simulator can compile the project but cannot exercise the camera flow. The official OpenCV iOS framework is downloaded from the OpenCV 5.0.0 GitHub release and is intentionally not committed.
 
-Captured photos remain in the app's private `Application Support/RecallLens/Captures` directory. Existing installations migrate the former `WeirdBoots` directory automatically. Photos are not written to Photos or Files and are removed when the app is deleted.
+Captured photos remain in the app's private `Application Support/recalllens/Captures` directory. Existing installations migrate the former `RecallLens` or `WeirdBoots` directory automatically. Photos are not written to Photos or Files and are removed when the app is deleted.
 
 ## Deploy the AWS verifier
 
@@ -77,7 +79,7 @@ The shared demonstration token does not provide user ownership or tamper-resista
 
 ## License
 
-Recall Lens source code is available under the MIT License. Private photographs, device backups, credentials and the deployed demonstration token are not included. OpenCV and other dependencies retain their own licenses.
+Recalllens source code is available under the MIT License. Private photographs, device backups, credentials and the deployed demonstration token are not included. OpenCV and other dependencies retain their own licenses.
 
 Read [`SECURITY.md`](SECURITY.md) before exposing the AWS service publicly. The supplied cloud authentication is intentionally scoped to a controlled competition demonstration, not a production deployment.
 

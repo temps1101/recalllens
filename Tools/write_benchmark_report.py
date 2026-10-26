@@ -26,7 +26,7 @@ def main():
     misses = [r for r in pairs if r["expected_match"] == "True" and r["geometric_accept"] == "False"]
     failure_table = ["| Pair | Direction | Score | Threshold |", "|---|---|---:|---:|"]
     failure_table += [f"| {r['pair_id']} | {r['direction']} | {float(r['similarity']):.6f} | 0.62 |" for r in misses]
-    document = f"""# Recall Lens - Retrospective photographic evaluation
+    document = f"""# Recalllens - Retrospective photographic evaluation
 
 ## Evidence and scope
 

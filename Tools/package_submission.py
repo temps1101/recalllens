@@ -27,12 +27,13 @@ def main():
             if p.is_file() and p.suffix in suffixes and '__pycache__' not in p.parts:
                 add(p)
     for name in ['TECHNICAL_REPORT.md', 'PHOTO_BENCHMARK.md', 'DEVPOST_SUBMISSION.md',
-                 'EVALUATION.md', 'DIVERSE_PHOTO_STUDY.md', 'EVALUATION_EXPANSION.md', 'SHARING.md', 'JUDGE_README.md', 'architecture.svg', 'architecture.png']:
+                 'DIVERSE_PHOTO_STUDY.md', 'SHARING.md', 'JUDGE_README.md',
+                 'architecture.svg', 'architecture.png', 'recalllens.svg', 'recalllens.png']:
         add(ROOT / 'docs' / name)
     for p in sorted((ROOT / 'docs/figures').glob('*')):
         if p.suffix in {'.png', '.pdf'}:
             add(p)
-    add(ROOT / 'output/pdf/Recall-Lens-Technical-Report.pdf', 'Recall-Lens-Technical-Report.pdf')
+    add(ROOT / 'output/pdf/Recalllens-Technical-Report.pdf', 'Recalllens-Technical-Report.pdf')
     evidence = ROOT / 'docs/evidence'
     for p in evidence.rglob('*'):
         if p.is_file() and p.suffix in {'.json','.csv','.md'}:
@@ -53,15 +54,15 @@ def main():
             files[name] = content.replace(str(ROOT).encode(), b'/path/to/RecallLens')
     manifest = {name:hashlib.sha256(content).hexdigest() for name,content in sorted(files.items())}
     files['SHA256SUMS.json'] = (json.dumps(manifest, indent=2)+'\n').encode()
-    output = ROOT / 'output/submission/Recall-Lens-Submission.zip'
+    output = ROOT / 'output/submission/Recalllens-Submission.zip'
     output.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as z:
         for name, content in sorted(files.items()):
-            z.writestr('RecallLens/'+name, content)
+            z.writestr('Recalllens/'+name, content)
     with zipfile.ZipFile(output) as z:
         assert z.testzip() is None
         for name, digest in manifest.items():
-            assert hashlib.sha256(z.read('RecallLens/'+name)).hexdigest() == digest
+            assert hashlib.sha256(z.read('Recalllens/'+name)).hexdigest() == digest
     print(json.dumps({'archive':str(output),'files':len(files),'bytes':output.stat().st_size,'sha256':hashlib.sha256(output.read_bytes()).hexdigest(),'private_token_scan':'passed','archive_integrity':'passed'}))
 
 

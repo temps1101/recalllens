@@ -61,7 +61,7 @@ def main():
             public_cases.append({'pair_id':pair,'title':title,'label':label['label'],'capture_interval_seconds':gap,
                                  'forward_score':float(forward['similarity']),'reverse_score':float(reverse['similarity']),
                                  'selection':'Illustrative outcome categories, not a new accuracy sample'})
-        fig.suptitle('Recall Lens | Actual archived photographs', fontsize=16, fontweight='bold')
+        fig.suptitle('Recalllens | Actual archived photographs', fontsize=16, fontweight='bold')
         fig.supxlabel('Original photographs, scaled for display. No synthetic viewpoint changes. EXIF and GPS are not embedded in this figure.', fontsize=8)
         fig.savefig(output / f'natural-cases-{figure_index}.png',dpi=170,bbox_inches='tight')
         plt.close(fig)

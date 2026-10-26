@@ -29,7 +29,7 @@ def summarize_latency(label, values):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Summarize Recall Lens evaluation CSV")
+    parser = argparse.ArgumentParser(description="Summarize Recalllens evaluation CSV")
     parser.add_argument("csv_path")
     args = parser.parse_args()
 
@@ -58,7 +58,7 @@ def main():
         if float(row["aws_compute_ms"]) > 0
     ]
 
-    print("# Recall Lens evaluation summary")
+    print("# Recalllens evaluation summary")
     print()
     print(f"- Samples: {len(rows)} ({len(positives)} positive, {len(negatives)} negative)")
     if positives:

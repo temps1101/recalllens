@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Batch evaluation for the Recall Lens OpenCV 5 scene matcher."""
+"""Batch evaluation for the Recalllens OpenCV 5 scene matcher."""
 
 from __future__ import annotations
 
@@ -209,7 +209,7 @@ def summarize_predictions(predictions: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Evaluate Recall Lens images with the production OpenCV 5 matcher.")
+    parser = argparse.ArgumentParser(description="Evaluate Recalllens images with the production OpenCV 5 matcher.")
     parser.add_argument("--data", type=Path, default=Path(__file__).parents[1] / "data")
     parser.add_argument("--output", type=Path, default=Path(__file__).parents[1] / "output")
     parser.add_argument("--threshold", type=float, default=DEFAULT_THRESHOLD)

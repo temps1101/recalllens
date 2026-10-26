@@ -82,7 +82,7 @@ struct CameraScreen: View {
         .fullScreenCover(item: Binding(get: { model.pendingCapture }, set: { if $0 == nil { model.discardPendingCapture() } })) { capture in
             CaptureReviewView(model: model, capture: capture)
         }
-        .alert(model.errorMessage != nil ? String(localized: "エラー") : "Recall Lens", isPresented: errorBinding) {
+        .alert(model.errorMessage != nil ? String(localized: "エラー") : "Recalllens", isPresented: errorBinding) {
             if let record = model.shareRetryRecord, model.errorMessage != nil {
                 Button(String(localized: "再試行")) { model.errorMessage = nil; model.copyShareLink(for: record) }
             }
@@ -121,7 +121,7 @@ struct CameraScreen: View {
                 .font(.largeTitle)
             Text(String(localized: "カメラへのアクセスが必要です"))
                 .font(.headline)
-            Text(String(localized: "設定で Recall Lens のカメラアクセスを許可してください。"))
+            Text(String(localized: "設定で Recalllens のカメラアクセスを許可してください。"))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

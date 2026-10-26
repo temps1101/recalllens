@@ -1,6 +1,6 @@
 # Security and privacy
 
-Recall Lens is a competition prototype. Local mode is the safest default: captures remain in the app's private storage and visual matching runs on the iPhone.
+Recalllens is a competition prototype. Local mode is the safest default: captures remain in the app's private storage and visual matching runs on the iPhone.
 
 ## Public repository
 

@@ -1,4 +1,4 @@
-# Recall Lens experiment environment
+# Recalllens experiment environment
 
 This directory reproduces the production OpenCV 5 ORB + RANSAC matcher and analyzes image metadata without uploading private photographs.
 

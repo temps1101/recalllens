@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Keyboard-first, symmetric pair labeling for Recall Lens."""
+"""Keyboard-first, symmetric pair labeling for Recalllens."""
 
 from __future__ import annotations
 
@@ -117,7 +117,7 @@ class Handler(BaseHTTPRequestHandler):
     def pairs_for_cluster(cls, cluster: str) -> list[tuple[dict[str, str], dict[str, str]]]:
         return cls.candidate_pairs_by_cluster.get(cluster, review_pairs(cls.assets_by_cluster.get(cluster, [])))
 
-    def page(self, content: str, title: str = "Recall Lens Pair Labeler", status: HTTPStatus = HTTPStatus.OK) -> None:
+    def page(self, content: str, title: str = "Recalllens Pair Labeler", status: HTTPStatus = HTTPStatus.OK) -> None:
         document = f"""<!doctype html><html lang='ja'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>{html.escape(title)}</title>
 <style>
 :root{{--bg:#080b10;--panel:#111720;--line:#293342;--text:#f4f7fb;--muted:#9aa6b6;--blue:#2f81f7;--green:#238636;--orange:#b86b16;--gray:#424b57}}
@@ -126,7 +126,7 @@ class Handler(BaseHTTPRequestHandler):
 .pair{{display:grid;grid-template-columns:1fr 1fr;gap:14px;height:calc(100vh - 220px);min-height:430px}}.photo{{position:relative;background:#000;border:1px solid var(--line);border-radius:12px;overflow:hidden}}.photo img{{width:100%;height:100%;object-fit:contain}}.badge{{position:absolute;top:12px;left:12px;padding:7px 10px;background:#000b;border-radius:7px}}.meta{{position:absolute;bottom:0;left:0;right:0;padding:24px 12px 10px;background:linear-gradient(transparent,#000e);font-size:13px}}
 .actions{{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}}button{{padding:13px;border:0;border-radius:9px;color:white;font-weight:700;font-size:15px;cursor:pointer}}.same{{background:var(--green)}}.different{{background:var(--orange)}}.skip{{background:var(--gray)}}.nav{{display:flex;justify-content:center;gap:22px;margin-top:10px}}.key{{display:inline-grid;place-items:center;min-width:27px;padding:3px 7px;background:#222b36;border:1px solid #455166;border-radius:5px;font:12px ui-monospace}}.progress{{height:4px;background:#202834;margin:8px 0 14px}}.progress span{{display:block;height:100%;background:var(--blue)}}
 @media(max-width:800px){{.pair{{grid-template-columns:1fr;height:auto}}.photo{{height:42vh}}}}
-</style></head><body><header><strong>Recall Lens — 対称ペア分類</strong><span class='muted'>左右は対等です</span></header><main>{content}</main></body></html>"""
+</style></head><body><header><strong>Recalllens — 対称ペア分類</strong><span class='muted'>左右は対等です</span></header><main>{content}</main></body></html>"""
         payload = document.encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "text/html; charset=utf-8")
@@ -240,7 +240,7 @@ def main() -> None:
     if not CANDIDATES_CSV.exists():
         raise SystemExit("Run Tools/build_label_candidates.py first.")
     server = ThreadingHTTPServer(("127.0.0.1", 8765), Handler)
-    print("Recall Lens symmetric pair labeler: http://127.0.0.1:8765")
+    print("Recalllens symmetric pair labeler: http://127.0.0.1:8765")
     print(f"Labels: {LABELS_CSV}")
     try:
         server.serve_forever()

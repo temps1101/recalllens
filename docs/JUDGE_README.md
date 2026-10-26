@@ -1,6 +1,6 @@
-# Recall Lens - Judge guide
+# Recalllens - Judge guide
 
-Start with `Recall-Lens-Technical-Report.pdf` and `docs/PHOTO_BENCHMARK.md`. This source package contains the iOS app, AWS service, tests, anonymized measurement rows, chart tools and a procedural smoke-test generator. The report includes six selected real-photo comparison pairs. The full personal photo dataset, source-file metadata, location coordinates and live demonstration token are excluded.
+Start with `Recalllens-Technical-Report.pdf` and `docs/PHOTO_BENCHMARK.md`. This source package contains the iOS app, AWS service, tests, anonymized measurement rows, chart tools and a procedural smoke-test generator. The report includes six selected real-photo comparison pairs. The full personal photo dataset, source-file metadata, location coordinates and live demonstration token are excluded.
 
 ## Recreate the figures
 

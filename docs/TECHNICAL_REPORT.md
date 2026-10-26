@@ -1,14 +1,14 @@
-# Recall Lens — Technical Report
+# Recalllens — Technical Report
 
 ## Executive summary
 
-Recall Lens is a private iOS camera that turns a visible real-world scene into the key for opening photographs captured there. The interaction is intentionally physical: a memory is not retrieved by typing a date, place name, or semantic query. It becomes available when the user returns the camera to sufficiently similar visual structure.
+Recalllens is a private iOS camera that turns a visible real-world scene into the key for opening photographs captured there. The interaction is intentionally physical: a memory is not retrieved by typing a date, place name, or semantic query. It becomes available when the user returns the camera to sufficiently similar visual structure.
 
 The system uses OpenCV 5.0.0 on both the iPhone and AWS. Owner-created photos use local candidate retrieval followed by independent Lambda verification against an expiring DynamoDB signature. An account-free sharing flow also lets an owner explicitly upload a downscaled photo to private S3 storage and send a link. A recipient prefetches the photo and discovers it through on-device scene matching. Ordinary unshared photographs remain in the iPhone application container.
 
 ## Problem, users, and impact
 
-Conventional photo archives optimize for immediate retrieval through timelines, albums, locations, and semantic search. These interfaces recover an image but discard the act of returning to the viewpoint that gave the image meaning. Recall Lens explores a complementary interaction: deliberate, place-bound recall.
+Conventional photo archives optimize for immediate retrieval through timelines, albums, locations, and semantic search. These interfaces recover an image but discard the act of returning to the viewpoint that gave the image meaning. Recalllens explores a complementary interaction: deliberate, place-bound recall.
 
 The initial users are people maintaining personal travel, family, and everyday-life archives. The prototype is most suitable for stable, visually textured scenes such as building facades, rooms, signs, and streetscapes. It is not intended for identity verification, physical access control, or proof of geographic location.
 
@@ -187,11 +187,11 @@ Diagnostics expose match scores, geometry and cloud timing to investigate these 
 
 Explicitly shared photos are downscaled by the sender, stripped of metadata by the service, and stored in a private encrypted S3 bucket. A random 192-bit bearer link permits account-free download for 30 days; expiry is checked before delivery and S3 lifecycle cleanup follows asynchronously. Recipients intentionally retain downloaded copies. Possession of the link grants access to the bytes; the scene match controls the app's presentation, not cryptographic secrecy. The existing throttle and budget apply to this route as well.
 
-Captured JPEGs remain in the application container, use complete file protection, are excluded from device backup, and are removed when the application is deleted. Recall Lens does not request Photos or location permission. Live verification frames are transmitted over HTTPS, processed in memory, and not retained by Lambda. DynamoDB stores expiring local-feature signatures rather than images.
+Captured JPEGs remain in the application container, use complete file protection, are excluded from device backup, and are removed when the application is deleted. Recalllens does not request Photos or location permission. Live verification frames are transmitted over HTTPS, processed in memory, and not retained by Lambda. DynamoDB stores expiring local-feature signatures rather than images.
 
 The demonstration token is intentionally limited to judging and must be rotated afterward. A public multi-user deployment would require Cognito or equivalent user-scoped authentication, per-user DynamoDB partitioning, abuse monitoring, explicit retention controls, and a published privacy policy.
 
-Visual correspondence is not identity, liveness, or location proof. Recall Lens must not be used for building access, safety-critical authentication, surveillance, or decisions about people. Users should avoid capturing identifiable people without consent.
+Visual correspondence is not identity, liveness, or location proof. Recalllens must not be used for building access, safety-critical authentication, surveillance, or decisions about people. Users should avoid capturing identifiable people without consent.
 
 ## Limitations
 
