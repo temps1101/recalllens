@@ -158,8 +158,8 @@ This pilot demonstrates the complete measurement path but is too small to suppor
 
 ### Separate software and cloud checks
 
-- The `RecallLens` Release simulator target builds successfully with the pinned OpenCV 5 iOS framework.
-- Five Lambda unit tests pass, including expiry immediately before, at, and after the timestamp, wrong-token rejection, missing references and image matching. Database interactions remain mocked in these tests.
+- The `Recalllens` Release target builds successfully with the pinned OpenCV 5 iOS framework and the signed build launches on the development iPhone.
+- Ten Lambda unit tests pass across verification and sharing, including expiry boundaries, wrong-token rejection, missing references, image matching, private upload authorization, account-free receipt and expired-object rejection. AWS service interactions remain mocked in these tests.
 - Swift stabilizer checks cover cloud revocation overriding display hold, fresh consecutive authorization, local smoothing and reset.
 - Three evaluator tests cover unsafe wrong-reference unlocks, empty metrics and agreement with Lambda scoring on identical feature inputs. This does not establish parity of the complete iPhone image-decoding pipeline.
 - A public procedural fixture exercises the offline evaluator on three shifted positive queries and one blank negative query. It is a smoke test, not photographic accuracy evidence.
