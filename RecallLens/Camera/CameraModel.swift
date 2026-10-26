@@ -1,5 +1,4 @@
 import AVFoundation
-import CoreImage
 import Foundation
 import UIKit
 
@@ -8,7 +7,6 @@ final class CameraModel: ObservableObject {
     @Published private(set) var permissionDenied = false
     @Published private(set) var isCapturing = false
     @Published private(set) var matchedRecords: [PhotoRecord] = []
-    private var cloudRegistryStatus = "未同期"
     private let configuration = MatchingConfiguration()
     @Published var errorMessage: String?
     @Published var shareNotice: String?
@@ -39,8 +37,6 @@ final class CameraModel: ObservableObject {
     private let sharing = PhotoSharingClient()
     private var pendingShares: [String] = []
     private var receivingID: String?
-    private var registrationInFlight = false
-    private var registrationRetry: Task<Void, Never>?
 
     let camera = CameraSession()
     let repository: PhotoRepository
@@ -53,13 +49,7 @@ final class CameraModel: ObservableObject {
     private var analysisGeneration = 0
     private var isActive = false
     private var lastAnalysisTime = Date.distantPast
-    private var analysisInterval: TimeInterval {
-        cloudVerifier.isConfigured ? 1.15 : 0.65
-    }
-    private let context = CIContext(options: [.cacheIntermediates: false])
-    private let cloudVerifier = CloudVerificationClient()
-    // Keep the legacy key so an installed build does not re-register every reference after renaming.
-    private let cloudRegistrationDefaultsKey = "weirdboots.cloudRegistrationDates"
+    private let analysisInterval: TimeInterval = 0.65
     init(repository: PhotoRepository = PhotoRepository()) {
         self.repository = repository
         matcher = MatcherRegistry.makeDefault(repository: repository)
@@ -75,7 +65,6 @@ final class CameraModel: ObservableObject {
             return
         }
         isActive = !permissionDenied
-        await syncCloudReferences()
     }
 
     func stop() {
@@ -88,8 +77,6 @@ final class CameraModel: ObservableObject {
         stabilizer.reset()
         matchedRecords = []
         camera.stop()
-        registrationRetry?.cancel()
-        registrationRetry = nil
     }
 
     func capture() {
@@ -110,7 +97,7 @@ final class CameraModel: ObservableObject {
             defer { isSharing = false }
             do {
                 guard let data = repository.imageData(for: record), let image = UIImage(data: data),
-                      let jpeg = image.cloudVerificationJPEG(maximumDimension: 1600) else {
+                      let jpeg = image.sharingJPEG() else {
                     throw PhotoSharingClient.SharingError.invalid
                 }
                 let share = try await sharing.create(record: record, jpeg: jpeg)
@@ -149,7 +136,6 @@ final class CameraModel: ObservableObject {
                             self?.copyShareLink(for: record)
                         }
                     }
-                    await self.syncCloudReferences()
                 }
             } catch {
                 Task { @MainActor in
@@ -180,14 +166,12 @@ final class CameraModel: ObservableObject {
                 do {
                     let payload = try await sharing.receive(id: id)
                     let repository = repository
-                    let extractor = extractor
                     let _: PhotoRecord = try await withCheckedThrowingContinuation { continuation in
                         matchingQueue.async {
                             do {
-                                guard let image = UIImage(data: payload.photo) else { throw PhotoSharingClient.SharingError.invalid }
-                                let features = try extractor.featureData(for: image)
-                                let record = try repository.save(jpegData: payload.photo, featureData: features,
-                                    featureAlgorithm: OpenCVFeatureExtractor.algorithm, id: payload.recordId,
+                                guard UIImage(data: payload.photo) != nil else { throw PhotoSharingClient.SharingError.invalid }
+                                let record = try repository.save(jpegData: payload.photo, featureData: payload.featureData,
+                                    featureAlgorithm: payload.featureAlgorithm, id: payload.recordId,
                                     capturedAt: Date(timeIntervalSince1970: payload.capturedAt), sourceShareID: id)
                                 continuation.resume(returning: record)
                             } catch { continuation.resume(throwing: error) }
@@ -207,7 +191,6 @@ final class CameraModel: ObservableObject {
         lastAnalysisTime = now
         let records = repository.records()
         let configuration = configuration
-        let previewData = cloudVerifier.isConfigured ? previewJPEG(from: pixelBuffer) : nil
         let matcher = matcher
         let generation = analysisGeneration
         let frame = SendablePixelBuffer(pixelBuffer)
@@ -225,7 +208,6 @@ final class CameraModel: ObservableObject {
                         candidates: candidates,
                         records: records,
                         configuration: configuration,
-                        liveJPEG: previewData,
                         generation: generation
                     )
                 }
@@ -266,57 +248,16 @@ final class CameraModel: ObservableObject {
         }
     }
 
-    private func previewJPEG(from pixelBuffer: CVPixelBuffer) -> Data? {
-        let image = CIImage(cvPixelBuffer: pixelBuffer)
-        guard let cgImage = context.createCGImage(image, from: image.extent) else { return nil }
-        return UIImage(cgImage: cgImage).cloudVerificationJPEG()
-    }
-
     private func finishAnalysis(
         candidates: [MatchCandidate],
         records: [PhotoRecord],
         configuration: MatchingConfiguration,
-        liveJPEG: Data?,
         generation: Int
     ) async {
         guard isActive, generation == analysisGeneration else { return }
-        var finalCandidates = candidates
-        var cloudAuthorized: Bool?
-
-        if cloudVerifier.isConfigured {
-            finalCandidates = candidates.map {
-                $0.record.isReceived ? $0 : MatchCandidate(record: $0.record, similarity: 0, distance: 1)
-            }
-            if !registrationInFlight, let top = candidates.first(where: { !$0.record.isReceived }), top.similarity >= 0.25, let liveJPEG {
-                do {
-                    let remote = try await cloudVerifier.verify(
-                        queryJPEG: liveJPEG,
-                        referenceID: top.record.id
-                    )
-                    let position = finalCandidates.firstIndex(where: { $0.id == top.id })!
-                    finalCandidates[position] = MatchCandidate(
-                        record: top.record,
-                        similarity: remote.authorized ? remote.similarity : 0,
-                        distance: 1 - remote.inlierRatio
-                    )
-                    cloudAuthorized = remote.authorized
-                } catch {
-                    guard isActive, generation == analysisGeneration else { return }
-                    cloudAuthorized = false
-                }
-            } else {
-                cloudAuthorized = false
-            }
-        }
-
-        guard isActive, generation == analysisGeneration else { return }
-        let authorizedIDs: Set<UUID>? = cloudVerifier.isConfigured
-            ? Set(finalCandidates.filter { $0.record.isReceived || (cloudAuthorized == true && $0.similarity > 0) }.map(\.id))
-            : nil
         let visibleIDs = stabilizer.update(
-            candidates: finalCandidates,
-            configuration: configuration,
-            authorizedIDs: authorizedIDs
+            candidates: candidates,
+            configuration: configuration
         )
         matchedRecords = records
             .filter { visibleIDs.contains($0.id) }
@@ -324,59 +265,6 @@ final class CameraModel: ObservableObject {
         analysisInFlight = false
     }
 
-    private func syncCloudReferences(allowRetry: Bool = true) async {
-        guard !registrationInFlight else { return }
-        guard cloudVerifier.isConfigured else {
-            cloudRegistryStatus = "AWS未設定"
-            return
-        }
-        let records = repository.records().filter { !$0.isReceived }
-        guard !records.isEmpty else {
-            cloudRegistryStatus = "参照なし"
-            return
-        }
-        let cutoff = Date().addingTimeInterval(-29 * 24 * 60 * 60).timeIntervalSince1970
-        let registrationDates = UserDefaults.standard.dictionary(forKey: cloudRegistrationDefaultsKey)
-            as? [String: Double] ?? [:]
-        let pending = records.filter {
-            registrationDates[$0.id.uuidString.lowercased(), default: 0] < cutoff
-        }
-        guard !pending.isEmpty else {
-            cloudRegistryStatus = "同期済み"
-            return
-        }
-        cloudRegistryStatus = "同期中"
-        registrationInFlight = true
-        defer { registrationInFlight = false }
-        do {
-            // Re-read after every enrollment so a capture arriving during startup is not skipped.
-            while let record = repository.records().first(where: {
-                !$0.isReceived && ((UserDefaults.standard.dictionary(forKey: cloudRegistrationDefaultsKey) as? [String: Double])?[$0.id.uuidString.lowercased()] ?? 0) < cutoff
-            }) {
-                try await cloudVerifier.enroll(referenceID: record.id, featureData: record.featureData)
-                markCloudReferenceRegistered(record.id)
-                try await Task.sleep(for: .seconds(1.1))
-            }
-            cloudRegistryStatus = "同期済み"
-        } catch {
-            cloudRegistryStatus = "同期待ち"
-            if allowRetry {
-                registrationRetry?.cancel()
-                registrationRetry = Task { [weak self] in
-                    do { try await Task.sleep(for: .seconds(15)) } catch { return }
-                    guard let self, self.isActive else { return }
-                    await self.syncCloudReferences(allowRetry: false)
-                }
-            }
-        }
-    }
-
-    private func markCloudReferenceRegistered(_ id: UUID) {
-        var dates = UserDefaults.standard.dictionary(forKey: cloudRegistrationDefaultsKey)
-            as? [String: Double] ?? [:]
-        dates[id.uuidString.lowercased()] = Date().timeIntervalSince1970
-        UserDefaults.standard.set(dates, forKey: cloudRegistrationDefaultsKey)
-    }
 }
 
 private struct SendablePixelBuffer: @unchecked Sendable {

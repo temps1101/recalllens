@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: Ephemeral OpenCV 5 geometric verification for Recalllens.
+Description: Account-free Recalllens photo and OpenCV feature-pair delivery.
 
 Parameters:
   ApiToken:
@@ -34,12 +34,8 @@ Resources:
       Environment:
         Variables:
           API_TOKEN: !Ref ApiToken
-          REFERENCE_TABLE: !Ref ReferenceTable
-          UNLOCK_THRESHOLD: "0.62"
           SHARE_BUCKET: !Ref SharedPhotos
       Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref ReferenceTable
         - Statement:
             - Effect: Allow
               Action:
@@ -65,18 +61,6 @@ Resources:
             ApiId: !Ref VerificationApi
             Method: GET
             Path: /s/{shareId}
-        Verify:
-          Type: HttpApi
-          Properties:
-            ApiId: !Ref VerificationApi
-            Method: POST
-            Path: /verify
-        RegisterReference:
-          Type: HttpApi
-          Properties:
-            ApiId: !Ref VerificationApi
-            Method: POST
-            Path: /references
     Metadata:
       Dockerfile: Dockerfile
       DockerContext: .
@@ -89,24 +73,6 @@ Resources:
     Properties:
       LogGroupName: !Sub "/aws/lambda/${VerificationFunction}"
       RetentionInDays: 3
-
-  ReferenceTable:
-    Type: AWS::DynamoDB::Table
-    DeletionPolicy: Delete
-    UpdateReplacePolicy: Delete
-    Properties:
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: referenceId
-          AttributeType: S
-      KeySchema:
-        - AttributeName: referenceId
-          KeyType: HASH
-      SSESpecification:
-        SSEEnabled: true
-      TimeToLiveSpecification:
-        AttributeName: expiresAt
-        Enabled: true
 
   SharedPhotos:
     Type: AWS::S3::Bucket
@@ -162,5 +128,5 @@ Resources:
 
 Outputs:
   VerificationEndpoint:
-    Description: Configure this URL as WBCloudVerificationURL in the iOS target.
-    Value: !Sub "https://${VerificationApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/prod/verify"
+    Description: Configure this sharing URL as WBCloudVerificationURL in the iOS target.
+    Value: !Sub "https://${VerificationApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/prod/shares"

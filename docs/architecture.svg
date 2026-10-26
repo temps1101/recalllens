@@ -1,32 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
-  <title id="title">Recalllens OpenCV 5 and AWS architecture</title>
-  <desc id="desc">The iPhone keeps private photos locally and uses local OpenCV for candidate selection. AWS stores compact ORB signatures in DynamoDB and Lambda independently authorizes each unlock.</desc>
+  <title id="title">Recalllens local matching and optional AWS sharing architecture</title>
+  <desc id="desc">Capture and matching stay on the iPhone. Only an explicit Share action sends an image and OpenCV feature signature to AWS for validation and temporary delivery.</desc>
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0 0L0 6L9 3Z" fill="#334155"/></marker>
-    <style>.title{font:700 30px -apple-system,sans-serif;fill:#0f172a}.head{font:700 20px -apple-system,sans-serif;fill:#0f172a}.body{font:16px -apple-system,sans-serif;fill:#334155}.small{font:14px -apple-system,sans-serif;fill:#475569}.box{fill:#fff;stroke:#64748b;stroke-width:2}.ios{fill:#eff6ff;stroke:#2563eb}.aws{fill:#fff7ed;stroke:#ea580c}.decision{fill:#f0fdf4;stroke:#16a34a}.line{stroke:#334155;stroke-width:2.5;fill:none;marker-end:url(#arrow)}</style>
+    <style>.title{font:700 30px -apple-system,sans-serif;fill:#0f172a}.head{font:700 19px -apple-system,sans-serif;fill:#0f172a}.body{font:16px -apple-system,sans-serif;fill:#334155}.small{font:14px -apple-system,sans-serif;fill:#475569}.box{fill:#fff;stroke:#64748b;stroke-width:2}.local{fill:#eff6ff;stroke:#2563eb}.share{fill:#fff7ed;stroke:#ea580c}.result{fill:#f0fdf4;stroke:#16a34a}.line{stroke:#334155;stroke-width:2.5;fill:none;marker-end:url(#arrow)}</style>
   </defs>
   <rect width="1200" height="680" fill="#f8fafc"/>
-  <text x="60" y="62" class="title">Recalllens — OpenCV 5 scene-key architecture</text>
-  <rect x="55" y="105" width="670" height="505" rx="24" class="box ios"/>
-  <text x="85" y="145" class="head">iPhone · private archive and first-stage perception</text>
-  <rect x="90" y="185" width="180" height="100" rx="15" class="box"/><text x="115" y="225" class="head">Live camera</text><text x="115" y="254" class="body">Low-frequency frame</text>
-  <rect x="335" y="175" width="330" height="120" rx="15" class="box"/><text x="365" y="215" class="head">OpenCV 5.0.0</text><text x="365" y="245" class="body">ORB → Hamming ratio test</text><text x="365" y="271" class="body">RANSAC homography → local score</text>
-  <path d="M270 235H335" class="line"/>
-  <rect x="90" y="365" width="250" height="120" rx="15" class="box"/><text x="120" y="405" class="head">App container</text><text x="120" y="435" class="body">JPEG + ORB index</text><text x="120" y="461" class="small">No Photos or location access</text>
-  <path d="M340 425C420 425 410 295 470 295" class="line"/>
-  <rect x="415" y="375" width="250" height="100" rx="15" class="box"/><text x="445" y="414" class="head">Candidate prefilter</text><text x="445" y="444" class="body">Top local score ≥ 0.25</text>
-  <path d="M550 295V375" class="line"/>
-  <rect x="250" y="515" width="300" height="70" rx="15" class="box decision"/><text x="280" y="558" class="head">Stable score unlocks photo</text>
-  <path d="M540 475C540 510 500 515 500 515" class="line"/>
-  <rect x="785" y="105" width="360" height="505" rx="24" class="box aws"/>
-  <text x="820" y="145" class="head">AWS · scene-key authority</text>
-  <rect x="830" y="200" width="270" height="90" rx="15" class="box"/><text x="860" y="238" class="head">API Gateway</text><text x="860" y="267" class="body">HTTPS · token · throttling</text>
-  <rect x="830" y="325" width="270" height="110" rx="15" class="box"/><text x="860" y="365" class="head">Lambda arm64</text><text x="860" y="395" class="body">OpenCV 5 ORB + RANSAC</text><text x="860" y="419" class="small">Server-owned allow / deny</text>
-  <rect x="830" y="485" width="270" height="90" rx="15" class="box"/><text x="860" y="522" class="head">DynamoDB</text><text x="860" y="550" class="small">ORB signatures · 30-day TTL</text>
-  <path d="M965 290V325" class="line"/>
-  <path d="M965 485V435" class="line"/>
-  <path d="M665 425C750 425 745 245 830 245" class="line"/><text x="690" y="330" class="small">Live JPEG + candidate ID</text>
-  <path d="M830 395C745 395 750 550 550 550" class="line"/><text x="660" y="515" class="small">Authorized decision</text>
-  <path d="M340 455C660 610 735 245 830 245" class="line"/><text x="580" y="590" class="small">Capture once: ORB signature only</text>
-  <text x="65" y="650" class="small">Privacy: JPEG archive stays on iPhone. When cloud authority is configured, AWS errors fail closed.</text>
+  <text x="55" y="58" class="title">Recalllens — local recall, optional AWS sharing</text>
+  <rect x="45" y="92" width="1110" height="245" rx="24" class="box local"/>
+  <text x="75" y="130" class="head">Everyday use · entirely on iPhone</text>
+  <rect x="75" y="165" width="190" height="105" rx="15" class="box"/>
+  <text x="104" y="206" class="head">Camera / capture</text><text x="104" y="237" class="body">No network request</text>
+  <rect x="320" y="155" width="280" height="125" rx="15" class="box"/>
+  <text x="348" y="196" class="head">OpenCV 5 on-device</text><text x="348" y="226" class="body">ORB · Hamming KNN</text><text x="348" y="252" class="body">RANSAC homography</text>
+  <rect x="655" y="155" width="220" height="125" rx="15" class="box"/>
+  <text x="683" y="196" class="head">Private archive</text><text x="683" y="226" class="body">JPEG + ORB signature</text><text x="683" y="252" class="small">App container</text>
+  <rect x="930" y="165" width="190" height="105" rx="15" class="box result"/>
+  <text x="958" y="205" class="head">Local recall</text><text x="958" y="236" class="body">All scene matches</text>
+  <path d="M265 217H320" class="line"/><path d="M600 217H655" class="line"/><path d="M875 217H930" class="line"/>
+  <rect x="45" y="375" width="1110" height="245" rx="24" class="box share"/>
+  <text x="75" y="413" class="head">Only when Share is selected · temporary cross-device transfer</text>
+  <rect x="75" y="455" width="180" height="105" rx="15" class="box"/>
+  <text x="104" y="496" class="head">Share action</text><text x="104" y="527" class="small">Image + signature</text>
+  <rect x="300" y="445" width="235" height="125" rx="15" class="box"/>
+  <text x="328" y="484" class="head">Lambda · OpenCV 5</text><text x="328" y="514" class="body">Re-extract features</text><text x="328" y="540" class="body">Validate pair</text>
+  <rect x="580" y="455" width="190" height="105" rx="15" class="box"/>
+  <text x="608" y="496" class="head">Private S3</text><text x="608" y="527" class="small">Encrypted · 30 days</text>
+  <rect x="815" y="445" width="305" height="125" rx="15" class="box result"/>
+  <text x="843" y="484" class="head">Recipient iPhone</text><text x="843" y="514" class="body">Download pair once</text><text x="843" y="540" class="body">Then match locally / offline</text>
+  <path d="M255 507H300" class="line"/><path d="M535 507H580" class="line"/><path d="M770 507H815" class="line"/>
+  <text x="55" y="657" class="small">No DynamoDB registry · no live-frame upload · no AWS dependency during capture or recall</text>
 </svg>

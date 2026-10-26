@@ -15,7 +15,7 @@ import numpy as np
 from botocore.exceptions import ClientError
 
 TOKEN = re.compile(r"^[A-Za-z0-9_-]{32}$")
-MAX_BODY = 2_100_000
+MAX_BODY = 2_500_000
 LIFETIME = 30 * 86400
 
 
@@ -53,6 +53,22 @@ def handle(event, path, method, upload_authorized):
             if not ok: raise ValueError('Invalid JPEG')
             photo = base64.b64encode(jpeg).decode('ascii')
             if len(photo) > 2_000_000: raise ValueError('Photo too large')
+            feature_data = payload.get('featureData', '')
+            feature_algorithm = payload.get('featureAlgorithm', '')
+            if feature_algorithm != 'opencv-5-orb-v1': raise ValueError('Invalid feature algorithm')
+            # Validate that the uploaded OpenCV signature and JPEG describe the same scene.
+            # This is the only server-side vision operation in the sharing architecture.
+            import handler
+            feature_blob = handler._decode_feature_blob(feature_data)
+            reference_points, reference_descriptors, _ = handler._unpack_features(feature_blob)
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            orb = cv2.ORB.create(nfeatures=1600, scaleFactor=1.2, nlevels=8, edgeThreshold=31,
+                                 firstLevel=0, WTA_K=2, scoreType=cv2.ORB_HARRIS_SCORE,
+                                 patchSize=31, fastThreshold=12)
+            query_points, query_descriptors = orb.detectAndCompute(gray, None)
+            binding = handler._match_features(query_points, query_descriptors, gray.shape,
+                                              reference_points, reference_descriptors)
+            if binding['similarity'] < 0.25: raise ValueError('Photo and feature signature do not match')
             captured = float(payload.get('capturedAt', time.time()))
             if not 0 <= captured <= time.time() + 86400: raise ValueError('Invalid capture date')
         except (ValueError, TypeError, binascii.Error, UnicodeError, cv2.error):
@@ -60,6 +76,7 @@ def handle(event, path, method, upload_authorized):
         token = secrets.token_urlsafe(24)
         now = int(time.time())
         item = {'shareId': token, 'recordId': str(uuid.uuid4()), 'photo': photo,
+                'featureData': feature_data, 'featureAlgorithm': feature_algorithm,
                 'capturedAt': captured, 'expiresAt': now + LIFETIME}
         s3, bucket = storage()
         s3.put_object(Bucket=bucket, Key=f'shares/{token}.json', Body=json.dumps(item).encode(),
@@ -68,7 +85,8 @@ def handle(event, path, method, upload_authorized):
         stage = context.get('stage', 'prod')
         base_url = os.environ.get('PUBLIC_BASE_URL') or ('https://' + context['domainName'] + ('' if stage == '$default' else '/' + stage))
         return response(201, {'shareId': token, 'expiresAt': item['expiresAt'],
-                              'url': base_url.rstrip('/') + '/s/' + token})
+                              'url': base_url.rstrip('/') + '/s/' + token,
+                              'engine': f"OpenCV {cv2.__version__} ORB pair validation"})
 
     match = re.search(r'/(shares|s)/([^/]+)$', path)
     if not match or method != 'GET' or not TOKEN.fullmatch(match[2]):

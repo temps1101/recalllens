@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, patch
 from botocore.exceptions import ClientError
 import sharing
 import handler
-from test_handler import encoded_test_image
+from test_handler import encoded_test_image, encoded_features
 
 class SharingTests(unittest.TestCase):
     def setUp(self):
@@ -30,7 +30,9 @@ class SharingTests(unittest.TestCase):
             'headers': {'x-api-key': token} if token else {}, 'body': json.dumps(payload or {})}, None)
 
     def create(self):
-        r = self.request('/shares', 'POST', {'photo': encoded_test_image(), 'capturedAt': 1000}, 'demo-key')
+        image = encoded_test_image()
+        r = self.request('/shares', 'POST', {'photo': image, 'featureData': encoded_features(image),
+            'featureAlgorithm': 'opencv-5-orb-v1', 'capturedAt': 1000}, 'demo-key')
         self.assertEqual(r['statusCode'], 201)
         return json.loads(r['body'])
 
@@ -42,6 +44,8 @@ class SharingTests(unittest.TestCase):
         photo = json.loads(result['body'])
         self.assertEqual(photo['shareId'], created['shareId'])
         self.assertTrue(photo['photo'])
+        self.assertTrue(photo['featureData'])
+        self.assertEqual(photo['featureAlgorithm'], 'opencv-5-orb-v1')
         self.assertEqual(self.request('/shares/'+created['shareId'])['body'], result['body'])
 
     def test_landing_never_embeds_photo_even_for_link_preview(self):
@@ -69,6 +73,8 @@ class SharingTests(unittest.TestCase):
         self.assertEqual(self.request('/shares/'+'x'*32)['statusCode'], 404)
         self.assertEqual(self.request('/shares/../secret')['statusCode'], 404)
         self.assertEqual(self.request('/shares', 'POST', {'photo':'not-jpeg'}, 'demo-key')['statusCode'], 400)
+        self.assertEqual(self.request('/shares', 'POST', {'photo':encoded_test_image(), 'featureData':'bad',
+            'featureAlgorithm':'opencv-5-orb-v1'}, 'demo-key')['statusCode'], 400)
         self.assertEqual(self.request('/shares', 'POST', {'photo':'x'*3_000_000}, 'demo-key')['statusCode'], 413)
         self.assertEqual(self.request('/shares', 'POST', [], 'demo-key')['statusCode'], 400)
 

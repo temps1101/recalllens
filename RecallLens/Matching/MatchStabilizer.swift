@@ -13,7 +13,7 @@ final class MatchStabilizer {
         authorizedIDs: Set<UUID>? = nil,
         now: Date = Date()
     ) -> Set<UUID> {
-        // Temporal smoothing must never extend a cloud authorization after revocation.
+        // An optional caller-supplied allowlist must take effect immediately.
         if let authorizedIDs {
             visibleIDs.formIntersection(authorizedIDs)
             visibleSince = visibleSince.filter { authorizedIDs.contains($0.key) }

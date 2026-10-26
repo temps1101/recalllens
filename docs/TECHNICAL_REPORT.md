@@ -4,7 +4,7 @@
 
 Recalllens is a private iOS camera that turns a visible real-world scene into the key for opening photographs captured there. The interaction is intentionally physical: a memory is not retrieved by typing a date, place name, or semantic query. It becomes available when the user returns the camera to sufficiently similar visual structure.
 
-The system uses OpenCV 5.0.0 on both the iPhone and AWS. Owner-created photos use local candidate retrieval followed by independent Lambda verification against an expiring DynamoDB signature. An account-free sharing flow also lets an owner explicitly upload a downscaled photo to private S3 storage and send a link. A recipient prefetches the photo and discovers it through on-device scene matching. Ordinary unshared photographs remain in the iPhone application container.
+The system uses OpenCV 5.0.0 on both the iPhone and AWS, with deliberately separate roles. Every capture and live-camera match runs locally. AWS is contacted only for explicit account-free sharing: Lambda checks that an uploaded JPEG and ORB signature describe the same scene, then private S3 temporarily delivers that pair. After receipt, matching is again entirely on-device. Ordinary unshared photographs and signatures remain in the iPhone application container.
 
 ## Problem, users, and impact
 
@@ -16,23 +16,23 @@ The proposed value is deliberate rediscovery of a personal memory through its vi
 
 ## User experience
 
-The application opens directly into a camera. Capturing a photograph creates a private archive record and an OpenCV feature signature. During later use, live frames are evaluated at a reduced frequency to control energy and network use. A stable match reveals the number of photographs associated with the visible scene. Opening the result snapshots the photos available at that moment.
+The application opens directly into a camera. Capturing a photograph creates a private archive record and an OpenCV feature signature. During later use, live frames are evaluated at a reduced frequency to control energy use. A stable match reveals the number of photographs associated with the visible scene. Opening the result snapshots all photos available at that moment.
 
-The interface suppresses unstable one-frame matches. Exponential moving-average smoothing, separate entry and exit thresholds, consecutive decisions and a minimum display duration reduce flicker. Owner-photo candidates lacking current cloud authorization are removed before smoothing. One representative matching-photo thumbnail appears beside the shutter. Viewer pages identify received photos. Once a user deliberately opens a photo, the viewer retains that snapshot until manually closed, even if the camera turns away. This does not add a permanently unlocked album.
+The interface suppresses unstable one-frame matches. Exponential moving-average smoothing, separate entry and exit thresholds, consecutive decisions and a minimum display duration reduce flicker. One representative matching-photo thumbnail appears beside the shutter; its count and swipeable viewer expose every current match. Viewer pages identify received photos. Once a user deliberately opens a photo, the viewer retains that snapshot until manually closed, even if the camera turns away. This does not add a permanently unlocked album.
 
-A background feature check disables capture and provides inline guidance when fewer than eight ORB features are available, the minimum correspondence count used before homography estimation. This is a feasibility guard, not a guarantee that a future view will match. Expected featureless-frame failures no longer trigger repeated modal alerts. Registration is serialized, transient registration failures are retried, and the camera starts without waiting for cloud enrollment.
+A background feature check disables capture and provides inline guidance when fewer than eight ORB features are available, the minimum correspondence count used before homography estimation. This is a feasibility guard, not a guarantee that a future view will match. Expected featureless-frame failures no longer trigger repeated modal alerts.
 
 ### Account-free sharing
 
-Each capture opens a full-screen review with Save, Share and Discard. A draft stays in memory until Save or Share is selected. Share saves locally, explicitly uploads a downscaled JPEG and copies an HTTPS link. Main controls, notices, capture guidance and camera permission text support Japanese and English. The landing page contains no photo preview and opens the installed app through a custom URL scheme, with a manual button if the browser blocks automatic launch. Universal Links and App Store distribution are not configured.
+Each capture opens a full-screen review with Save, Share and Discard. A draft stays in memory until Save or Share is selected. Share saves locally, explicitly uploads a downscaled JPEG with its ORB signature and copies an HTTPS link. Main controls, notices, capture guidance and camera permission text support Japanese and English. The landing page contains no photo preview and opens the installed app through a custom URL scheme, with a manual button if the browser blocks automatic launch. Universal Links and App Store distribution are not configured.
 
-The receiver sees only a receipt notice while the image and locally generated ORB signature are saved. Reopening the same link does not duplicate the record. Received photos are matched locally and are excluded from cloud signature enrollment. They can be matched without a network connection after receipt. The sender and recipient do not need accounts or a friend list.
+The receiver sees only a receipt notice while the validated image-signature pair is saved. Reopening the same link does not duplicate the record. Received photos can be matched without a network connection after receipt. The sender and recipient do not need accounts or a friend list.
 
 ## Architecture
 
-![Owner-photo verification architecture](architecture.png)
+![Recalllens local matching and optional sharing architecture](architecture.png)
 
-The sharing path adds: sender-selected JPEG -> Lambda -> private S3 object -> bearer-link recipient -> local OpenCV matching -> photo preview. This path intentionally prefetches image bytes; it is not server-gated geographic access control.
+The ordinary path is camera -> on-device OpenCV -> local image-signature archive -> on-device recall. The sharing path adds: sender-selected image-signature pair -> Lambda OpenCV pair validation -> private S3 object -> bearer-link recipient -> local archive and matching. This path intentionally prefetches image bytes; it is not server-gated geographic access control.
 
 ## OpenCV 5 implementation
 
@@ -56,15 +56,13 @@ The final similarity score combines three signals:
 
 Inlier support saturates at 36 inliers. Spatial coverage saturates when the inlier convex hull reaches 22% of the query frame. The production unlock threshold is 0.62.
 
-This pipeline rejects descriptor matches that lack a coherent planar transformation. OpenCV output directly changes application state: the archive remains hidden until geometric evidence exceeds the threshold and the cloud authority approves the candidate.
+This pipeline rejects descriptor matches that lack a coherent planar transformation. OpenCV output directly changes application state: matching photographs remain hidden until local geometric evidence exceeds the threshold.
 
 ## Meaningful AWS role
 
-AWS provides a separately stored scene-signature registry and an independent allow/deny decision for the configured application. At capture time, the iPhone registers image dimensions, keypoint coordinates, and ORB descriptors. DynamoDB stores this signature with server-side encryption and a 30-day expiration timestamp. The updated handler checks the timestamp before returning a signature; DynamoDB TTL later deletes expired records asynchronously. The captured archive JPEG is never registered.
+AWS provides an ephemeral cross-device transfer service for photos that users explicitly share. Lambda decodes the upload, strips metadata, re-extracts ORB features with OpenCV 5, and geometrically compares them with the supplied signature. A mismatched pair is rejected. A validated JPEG-signature pair is stored in private encrypted S3 and can be retrieved for 30 days through a random bearer link. There is no ordinary-capture registration endpoint, live-frame verification endpoint, or cloud dependency during recall.
 
-At unlock time, local OpenCV proposes one candidate to reduce bandwidth and cloud work. Lambda retrieves the candidate's registered signature and independently analyzes the live frame. The server applies its own threshold and returns an explicit `authorized` value with similarity, good-match count, RANSAC inliers, inlier ratio, coverage, OpenCV version, and processing duration. Missing signatures, invalid requests, rejection, or network failure keep the archive locked.
-
-The stack configuration uses arm64 with 1,024 MB memory and a ten-second timeout in AWS Asia Pacific (Tokyo), API Gateway at one request per second with a burst of two, and three-day CloudWatch retention. A monthly budget alert provides notification, not a hard spending cap. The shared token allows both registration and verification and does not separate users. A modified client can bypass the local presentation rule; the prototype is not a tamper-resistant vault.
+The stack uses arm64 with 1,024 MB memory and a ten-second timeout in AWS Asia Pacific (Tokyo), API Gateway at one request per second with a burst of two, and three-day CloudWatch retention. A monthly budget alert provides notification, not a hard spending cap. The upload token does not separate users. A modified client can bypass the local presentation rule; the prototype is not a tamper-resistant vault.
 
 ## Evaluation evidence
 
@@ -149,22 +147,19 @@ An exploratory iPhone run recorded six labeled trials: two positive and four neg
 | On-device matching | median 54.1 ms; p95 58.8 ms |
 | AWS round trip | median 330.0 ms; p95 503.3 ms |
 | AWS compute | median 181.1 ms; p95 244.1 ms |
-| References registered | 6/6 |
-| AWS-verified trials | 5/6 |
 
 ![Preliminary decision counts and latency](figures/preliminary-evaluation.png)
 
-This pilot demonstrates the complete measurement path but is too small to support a general accuracy claim. The repository includes a separate evaluation protocol, CSV logger, summarizer, offline OpenCV 5 batch evaluator, and Jupyter notebook. The additional study above implements a spatially held-out split; human validation and a broader prospective study remain necessary.
+This pilot predates the current sharing-only AWS architecture. Its on-device recognition figures remain relevant; the plotted AWS latency describes the superseded verifier and is not part of the current recall path. The sample is too small to support a general accuracy claim. The repository includes a separate evaluation protocol, CSV logger, summarizer, offline OpenCV 5 batch evaluator, and Jupyter notebook. The additional study above implements a spatially held-out split; human validation and a broader prospective study remain necessary.
 
 ### Separate software and cloud checks
 
 - The `Recalllens` Release target builds successfully with the pinned OpenCV 5 iOS framework and the signed build launches on the development iPhone.
-- Ten Lambda unit tests pass across verification and sharing, including expiry boundaries, wrong-token rejection, missing references, image matching, private upload authorization, account-free receipt and expired-object rejection. AWS service interactions remain mocked in these tests.
-- Swift stabilizer checks cover cloud revocation overriding display hold, fresh consecutive authorization, local smoothing and reset.
+- Lambda unit tests cover image-signature pair validation, wrong-token rejection, private upload authorization, account-free receipt and expired-object rejection. AWS service interactions remain mocked in these tests.
+- Swift stabilizer checks cover consecutive decisions, multi-record local smoothing and reset.
 - Three evaluator tests cover unsafe wrong-reference unlocks, empty metrics and agreement with Lambda scoring on identical feature inputs. This does not establish parity of the complete iPhone image-decoding pipeline.
 - A public procedural fixture exercises the offline evaluator on three shifted positive queries and one blank negative query. It is a smoke test, not photographic accuracy evidence.
-- The updated stack completed deployment on 26 October. A live smoke test registered a new procedural signature (HTTP 201), authorized its matching image (HTTP 200), rejected a wrong token (401), and rejected the expired signature (404) while the DynamoDB item was still present. The test record was removed afterward. Evidence is in `docs/evidence/deployed-checks.json`.
-- Immediately after deployment, that registration took 9.94 seconds and the matching request took 1.85 seconds end to end (1.52 seconds reported in the handler). These are single observations, not a latency distribution. Startup and network variability remain important; the earlier pilot median is not a guaranteed response time.
+- The sharing-only stack completed deployment on 27 October. A live smoke test rejected unauthenticated upload, validated and stored a generated image-signature pair, served its private landing page, delivered the pair without an account, preserved stable identity on repeated retrieval, and rejected it after logical expiry. The generated fixture was deleted afterward. Evidence is in `docs/evidence/sharing-checks.json`.
 - Two calibration tests verify that held-out results cannot select the tuning winner and that unreviewed model proposals are rejected. Reviewed AI labels are explicitly identified as such in the distributed evidence.
 
 
@@ -178,24 +173,24 @@ The natural-pair audit measured five missed positive directions. The illustrated
 - motion blur and heavy occlusion reduce valid correspondences;
 - strong viewpoint or illumination changes may prevent homography estimation;
 - repeated architectural patterns can propose an incorrect candidate;
-- a visually related scene can still remain locked during network failure because cloud mode fails closed;
-- server authorization adds hundreds of milliseconds beyond local candidate selection.
+- repeated or highly similar textures can still produce a local false candidate;
+- sharing and first receipt require network connectivity, although later recall does not.
 
-Diagnostics expose match scores, geometry and cloud timing to investigate these behaviors. Six-trial timing measures matching and verification only, not camera-to-visible-photo latency, which also includes sampling intervals and repeated match requirements.
+Diagnostics expose match scores and geometry to investigate these behaviors. Six-trial timing does not measure complete camera-to-visible-photo latency, which also includes sampling intervals and repeated match requirements.
 
 ## Privacy, security, and responsible operation
 
 Explicitly shared photos are downscaled by the sender, stripped of metadata by the service, and stored in a private encrypted S3 bucket. A random 192-bit bearer link permits account-free download for 30 days; expiry is checked before delivery and S3 lifecycle cleanup follows asynchronously. Recipients intentionally retain downloaded copies. Possession of the link grants access to the bytes; the scene match controls the app's presentation, not cryptographic secrecy. The existing throttle and budget apply to this route as well.
 
-Captured JPEGs remain in the application container, use complete file protection, are excluded from device backup, and are removed when the application is deleted. Recalllens does not request Photos or location permission. Live verification frames are transmitted over HTTPS, processed in memory, and not retained by Lambda. DynamoDB stores expiring local-feature signatures rather than images.
+Captured JPEGs and signatures remain in the application container, use complete file protection, are excluded from device backup, and are removed when the application is deleted. Recalllens does not request Photos or location permission. Ordinary captures and live camera frames are never transmitted. Only an explicit Share action sends the selected JPEG-signature pair.
 
-The demonstration token is intentionally limited to judging and must be rotated afterward. A public multi-user deployment would require Cognito or equivalent user-scoped authentication, per-user DynamoDB partitioning, abuse monitoring, explicit retention controls, and a published privacy policy.
+The demonstration token is intentionally limited to judging and must be rotated afterward. A public multi-user deployment would require user-scoped upload authentication, abuse monitoring, revocation, explicit retention controls, and a published privacy policy.
 
 Visual correspondence is not identity, liveness, or location proof. Recalllens must not be used for building access, safety-critical authentication, surveillance, or decisions about people. Users should avoid capturing identifiable people without consent.
 
 ## Limitations
 
-The current implementation performs linear local search and is designed for an MVP-sized archive. ORB and homography work best for textured, approximately planar, visually stable scenes. Dynamic environments and large viewpoint changes reduce reliability. Owner-photo cloud verification introduces network dependence; received photos match locally after download. A shared demonstration upload token is unsuitable for production abuse prevention. The preliminary evaluation sample is small and does not establish population-level performance. Shared-image recompression and the new capture-readiness gate have not received a separate accuracy study.
+The current implementation performs linear local search and is designed for an MVP-sized archive. ORB and homography work best for textured, approximately planar, visually stable scenes. Dynamic environments and large viewpoint changes reduce reliability. A shared demonstration upload token is unsuitable for production abuse prevention. The preliminary evaluation sample is small and does not establish population-level performance. Shared-image recompression and the new capture-readiness gate have not received a separate accuracy study.
 
 ## Reproducibility
 

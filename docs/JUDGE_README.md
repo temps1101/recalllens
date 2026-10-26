@@ -30,7 +30,7 @@ Follow `README.md` to fetch the pinned OpenCV iOS framework, generate the Xcode 
 
 No TestFlight binary is provided because the project uses an Apple Personal Team rather than a paid distribution membership. The primary judge-facing demonstration is the continuous real-device video. The source remains buildable with a judge's own signing team.
 
-For independent AWS deployment, follow `aws/README.md` using your own account. A controlled demonstration of the existing deployment requires separately arranged access; no credentials are embedded in this package. Owner verification sends a downscaled live frame to AWS. Explicit sharing uploads a downscaled JPEG for account-free delivery. Received photos match locally after download; see docs/SHARING.md. A shared demo token is not production user authentication.
+For independent AWS deployment, follow `aws/README.md` using your own account. A controlled demonstration of the existing deployment requires separately arranged access; no credentials are embedded in this package. AWS is used only when Share is selected: it validates and temporarily delivers the downscaled image-signature pair. Ordinary captures and live camera frames stay on-device, and received photos match locally after download; see docs/SHARING.md. A shared demo token is not production user authentication.
 
 ## Demonstration to record
 

@@ -2,7 +2,7 @@
 
 ## One-line description
 
-A private iOS camera that uses OpenCV 5 and AWS to turn a real-world view into the key that unlocks photographs captured from that scene.
+A private iOS camera that uses OpenCV 5 to turn a real-world view into a key for photographs, with AWS for optional account-free sharing.
 
 ## Inspiration
 
@@ -10,7 +10,7 @@ Photo libraries make images easy to retrieve but detach them from the viewpoints
 
 ## What it does
 
-The user captures a photograph inside Recalllens. Later, the application compares the live camera view with locally stored scene signatures. Owner photos use an additional AWS verification step. Matching photos appear as previews; a deliberately opened photo remains until manually closed.
+The user captures a photograph inside Recalllens. Later, the application compares the live camera view with locally stored scene signatures. Matching photos appear as one compact preview and a swipeable set; a deliberately opened photo remains until manually closed.
 
 Each capture opens a full-screen review with Save, Share and Discard. Share saves the photo and copies a sharing link. Anyone with an installed app can receive the photo without an account; the receipt reveals no preview. A representative thumbnail appears when the scene matches locally; the viewer identifies received photos. AWS stores and delivers the explicitly shared photos across devices.
 
@@ -18,24 +18,24 @@ Each capture opens a full-screen review with Save, Share and Discard. Share save
 
 The iOS application is written in SwiftUI with an Objective-C++ OpenCV bridge. OpenCV 5.0.0 extracts up to 1,600 ORB features, performs Hamming KNN matching with a 0.75 ratio test, and estimates a homography with RANSAC. Similarity combines inlier ratio, inlier support, and spatial coverage. Temporal smoothing and hysteresis stabilize the camera interface.
 
-Ordinary owner captures register an ORB feature signature in encrypted DynamoDB. Sharing explicitly uploads a downscaled JPEG to private S3 storage with 30-day bearer-link delivery; recipients prefetch and match locally. During unlock, local OpenCV proposes a candidate and sends its ID with a downscaled live frame through API Gateway. An arm64 Lambda running OpenCV 5 retrieves the signature, repeats Hamming and RANSAC verification, and owns the final allow/deny decision. Signatures expire after 30 days, live verification frames are not retained, and cloud failure prevents new owner-photo discovery. Deliberately opened viewers remain until manually closed.
+Ordinary capture, storage and matching remain on-device. Sharing explicitly uploads a downscaled JPEG together with its ORB signature. An arm64 Lambda running OpenCV 5 independently extracts features and rejects mismatched pairs; validated pairs are stored in private S3 for 30-day bearer-link delivery. Recipients download the pair once and then match locally. No live camera frame is sent to AWS. Deliberately opened viewers remain until manually closed.
 
 ## Challenges
 
-The main technical challenge was combining fast local candidate retrieval with an independent server-side geometric check. The phone proposes a candidate while Lambda checks it against a registered signature. Additional challenges included stabilizing scores without prolonging revoked cloud decisions, enforcing expiration before asynchronous database cleanup, and avoiding uploads of the captured archive.
+The main technical challenge was making robust local geometric retrieval feel stable while keeping cloud behavior explicit. Additional challenges included multi-photo matching, temporal stabilization, strict image-signature pair validation, expiration before asynchronous object cleanup, and account-free delivery without exposing a photo preview on the landing page.
 
 ## Accomplishments
 
 - The same OpenCV 5 feature and geometry pipeline runs on iOS and AWS.
-- Visual evidence changes application state and AWS owns the final authorization decision.
-- Ordinary captures remain local; only the explicit share action uploads a downscaled photo for account-free delivery.
-- The updated verifier rejects signatures at their 30-day expiration; DynamoDB deletes them asynchronously.
+- Visual evidence changes application state entirely on-device.
+- Ordinary captures and live camera frames remain local; only explicit Share uploads a downscaled image-signature pair.
+- Lambda uses OpenCV 5 to validate the pair before private, expiring delivery.
 - The deployment includes throttling, short log retention, invalid-token rejection, and budget monitoring.
 - The project includes deterministic build/deployment instructions, unit tests, an offline evaluator, and an architecture diagram. The production app contains no developer dashboard or destructive database controls.
 
 ## What we learned
 
-The controlled transformation tests showed high acceptance when geometry remained related. The natural-pair audit exposed a tradeoff: geometric verification rejected three negative comparisons accepted by the descriptor-support ablation, but also missed one additional positive. Cloud rejection must override display smoothing. Our shared-token prototype supplies a separate verification policy; it does not prevent a modified client from accessing locally stored photos.
+The controlled transformation tests showed high acceptance when geometry remained related. The natural-pair audit exposed a tradeoff: geometric verification rejected three negative comparisons accepted by the descriptor-support ablation, but also missed one additional positive. Temporal stabilization must reduce flicker without keeping stale matches visible indefinitely. The shared-token prototype validates uploaded pairs and distributes them; it does not prevent a modified client from accessing locally stored photos.
 
 ## Evaluation
 
@@ -49,7 +49,7 @@ As a supplementary robustness test, we evaluated 641 archived photographs under 
 
 A separate six-trial iPhone pilot produced 2/2 expected unlocks and 0/4 false unlocks, with median on-device matching of 54.1 ms and AWS round trip of 330.0 ms. It supports integration, not broad accuracy or camera-to-unlock latency claims.
 
-The updated deployment passed live checks for registration, matching, invalid-token rejection and expiry rejection before DynamoDB cleanup. Its first registration and matching requests took 9.94 seconds and 1.85 seconds respectively, so startup and network variability remain a limitation.
+The updated sharing deployment passed live checks for authenticated pair upload, account-free pair receipt, repeat identity, private landing-page behavior and logical expiry before S3 cleanup.
 
 Use `docs/figures/photo-stress-test.png`, `docs/figures/natural-pair-audit.png` and `docs/architecture.png`. The small pilot is supplementary evidence.
 
@@ -63,15 +63,15 @@ The next steps are human validation of the broader labels, calibration with hard
 
 ## Technologies
 
-SwiftUI, Objective-C++, OpenCV 5.0.0, ORB, Hamming KNN, RANSAC homography, AWS Lambda arm64, API Gateway, DynamoDB, CloudWatch, AWS SAM, Python, and Jupyter.
+SwiftUI, Objective-C++, OpenCV 5.0.0, ORB, Hamming KNN, RANSAC homography, AWS Lambda arm64, API Gateway, S3, CloudWatch, AWS SAM, Python, and Jupyter.
 
 ## Rubric alignment
 
 | Criterion | Primary evidence |
 |---|---|
-| Technical execution — 30% | OpenCV 5 parity across iOS/Lambda, geometric scoring, temporal stabilization, fail-closed cloud authorization, tests, evaluation tooling |
+| Technical execution — 30% | Local OpenCV 5 geometric retrieval, temporal stabilization, Lambda pair validation, tests, evaluation tooling |
 | Innovation — 20% | Physical scene as a visual key for deliberate memory retrieval |
 | Real-world impact — 20% | Private place-bound archives and extensions to field notes or site histories |
 | User experience — 10% | Camera-first capture, stable unlock state, hidden archive until authorization |
 | Documentation — 10% | Technical report, architecture diagram, pinned dependencies, build/deploy/test instructions, five-minute demo plan |
-| Cloud/reproducibility/responsibility — 10% | arm64 Lambda verification, encrypted TTL registry, private S3 link delivery with expiry, throttling, short logs, budget |
+| Cloud/reproducibility/responsibility — 10% | arm64 Lambda OpenCV pair validation, private S3 delivery with expiry, throttling, short logs, budget |

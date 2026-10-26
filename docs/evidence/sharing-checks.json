@@ -1,5 +1,6 @@
 {
-  "date": "2026-10-26",
+  "date": "2026-10-27",
+  "architecture": "AWS validates and temporarily delivers explicitly shared image-signature pairs; live matching is local",
   "stack_status": "UPDATE_COMPLETE",
   "checks": [
     {
@@ -18,7 +19,7 @@
       "passed": true
     },
     {
-      "check": "account_free_download",
+      "check": "account_free_pair_download",
       "status": 200,
       "passed": true
     },

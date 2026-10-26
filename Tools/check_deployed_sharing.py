@@ -15,7 +15,7 @@ from botocore.httpsession import get_cert_path
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'aws'))
-from test_handler import encoded_test_image
+from test_handler import encoded_test_image, encoded_features
 
 def main():
     creds=json.loads(subprocess.check_output(['aws','configure','export-credentials','--format','process','--region','ap-northeast-1']))
@@ -39,14 +39,16 @@ def main():
     checks=[]
     try:
         status,_=request('/shares',{},False);checks.append({'check':'unauthenticated_upload','status':status,'passed':status==401})
-        status,body=request('/shares',{'photo':encoded_test_image(),'capturedAt':time.time()},True)
+        image=encoded_test_image()
+        status,body=request('/shares',{'photo':image,'featureData':encoded_features(image),
+            'featureAlgorithm':'opencv-5-orb-v1','capturedAt':time.time()},True)
         checks.append({'check':'upload_generated_photo','status':status,'passed':status==201})
         if status!=201:raise RuntimeError('Fixture upload failed')
         share=json.loads(body);share_id=share['shareId']
         status,body=request('/s/'+share_id)
         checks.append({'check':'landing_has_deep_link_without_photo','status':status,'passed':status==200 and b'recalllens://receive/' in body and b'<img' not in body})
         status,body=request('/shares/'+share_id);item=json.loads(body)
-        checks.append({'check':'account_free_download','status':status,'passed':status==200 and item['shareId']==share_id and len(base64.b64decode(item['photo']))>0})
+        checks.append({'check':'account_free_pair_download','status':status,'passed':status==200 and item['shareId']==share_id and len(base64.b64decode(item['photo']))>0 and len(base64.b64decode(item['featureData']))>0 and item['featureAlgorithm']=='opencv-5-orb-v1'})
         status,again=request('/shares/'+share_id)
         checks.append({'check':'stable_identity_on_repeat','status':status,'passed':status==200 and json.loads(again)['recordId']==item['recordId']})
         item['expiresAt']=int(time.time())-1
@@ -55,7 +57,7 @@ def main():
         checks.append({'check':'expired_object_not_delivered','status':status,'passed':status==410})
     finally:
         if share_id:s3.delete_object(Bucket=bucket,Key=f'shares/{share_id}.json')
-    evidence={'date':'2026-10-26','stack_status':stack['StackStatus'],'checks':checks,'generated_fixture_deleted':bool(share_id),'all_passed':all(c['passed'] for c in checks)}
+    evidence={'date':'2026-10-27','architecture':'AWS validates and temporarily delivers explicitly shared image-signature pairs; live matching is local','stack_status':stack['StackStatus'],'checks':checks,'generated_fixture_deleted':bool(share_id),'all_passed':all(c['passed'] for c in checks)}
     (ROOT/'docs/evidence/sharing-checks.json').write_text(json.dumps(evidence,indent=2)+'\n')
     print(json.dumps(evidence,indent=2))
     if not evidence['all_passed']:raise SystemExit(1)
