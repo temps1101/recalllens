@@ -11,8 +11,8 @@ The app works without an AWS account. Local mode keeps captures and matching on 
 Requirements: macOS, Xcode with an iOS 17 SDK, Ruby, and an iPhone running iOS 17 or later.
 
 ```sh
-git clone https://github.com/temps1101/recall-lens.git
-cd recall-lens
+git clone https://github.com/temps1101/recalllens.git
+cd recalllens
 gem install xcodeproj --version 1.23.0
 cp Config/Cloud.xcconfig.example Config/Cloud.xcconfig
 ./Tools/setup_opencv.sh
