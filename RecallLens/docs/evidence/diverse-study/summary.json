@@ -1,0 +1,22 @@
+{
+  "composition": {
+    "tune/different_scene": 25,
+    "tune/uncertain": 13,
+    "test/same_scene": 14,
+    "test/uncertain": 9,
+    "tune/same_scene": 10,
+    "test/different_scene": 25
+  },
+  "feature_extraction_median_ms": {
+    "orb800": 12.17285,
+    "orb1600": 12.8841,
+    "sift1600": 43.56975
+  },
+  "tuned_geometry_acceptances_with_fewer_than_eight_matches": {
+    "orb_ransac": 1
+  },
+  "positive_blocks": {
+    "tune": 5,
+    "test": 6
+  }
+}

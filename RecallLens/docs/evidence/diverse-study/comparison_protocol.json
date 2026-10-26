@@ -1,0 +1,31 @@
+{
+  "algorithms": [
+    "hsv_histogram",
+    "orb_descriptor_support",
+    "orb_ransac",
+    "sift_ransac"
+  ],
+  "orb_feature_counts": [
+    800,
+    1600
+  ],
+  "sift_feature_counts": [
+    1600
+  ],
+  "ratio_tests": [
+    0.65,
+    0.75,
+    0.85
+  ],
+  "ransac_pixels": [
+    2.0,
+    4.0,
+    8.0
+  ],
+  "geometry_score": "0.52*inlier_ratio + 0.33*min(inliers/36,1) + 0.15*min(query_coverage/.22,1)",
+  "descriptor_score": "min(ratio-test matches/36,1)",
+  "histogram_score": "1 - Bhattacharyya distance; HSV bins 24x16x8, normalized",
+  "deployment_anchor": "ORB1600, ratio .75, RANSAC4, threshold .62; frozen before evaluation",
+  "calibration_rule": "For each family choose maximum positive acceptance subject to <=5% observed false acceptance on tune labels, then fewer false accepts, lower comparison latency, then stable config ID. Select thresholds using tune scores only. No guarantee about population error rates.",
+  "labeling": "No labels or model suggestions are inputs to scoring. Test scores are not inspected before calibration is frozen."
+}

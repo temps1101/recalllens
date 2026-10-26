@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-26",
+  "stack_status": "UPDATE_COMPLETE",
+  "checks": [
+    {
+      "check": "unauthenticated_upload",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "check": "upload_generated_photo",
+      "status": 201,
+      "passed": true
+    },
+    {
+      "check": "landing_has_deep_link_without_photo",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "account_free_download",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "stable_identity_on_repeat",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "expired_object_not_delivered",
+      "status": 410,
+      "passed": true
+    }
+  ],
+  "generated_fixture_deleted": true,
+  "all_passed": true
+}

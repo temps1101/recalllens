@@ -1,0 +1,7 @@
+category,positive_directions,accepted,negative_directions,false_accepts
+architecture,16,4,8,0
+indoor_scene,0,0,6,0
+mixed,0,0,32,0
+nature,0,0,2,0
+object,12,8,0,0
+screen_document,0,0,2,0

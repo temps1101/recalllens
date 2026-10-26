@@ -1,0 +1,225 @@
+{
+  "protocol": {
+    "version": 1,
+    "threshold": 0.62,
+    "seed": 20261026,
+    "conditions": [
+      "identity_control",
+      "dim_45pct",
+      "blur_sigma3",
+      "rotation25",
+      "perspective15pct",
+      "crop65pct",
+      "occlusion40pct"
+    ],
+    "methods": {
+      "geometric": "Unchanged ORB + RANSAC score, threshold 0.62",
+      "descriptor_support": "Ablation: min(ratio-test matches / 36, 1), threshold 0.62; not independently calibrated"
+    },
+    "sampling": "All supplied reference stills plus up to 512 locally available valid-GPS library originals, ordered by SHA256(UUID), exact-file deduplicated before scoring",
+    "limitations": [
+      "Synthetic transformations are not new captures or revisit trials",
+      "Human pair labels were selected through the production matcher and are exploratory",
+      "Bidirectional results share the same pair; they are not independent observations",
+      "Desktop pair verification excludes camera, temporal stabilization, network and retrieval ranking",
+      "Different photographs are not automatically labeled as different scenes"
+    ],
+    "library_count_requested": 512,
+    "started_utc": "2026-10-26T00:59:26.168293+00:00"
+  },
+  "completed_utc": "2026-10-26T01:04:20.381405+00:00",
+  "environment": {
+    "python": "3.12.3",
+    "platform": "macOS-27.0.1-arm64-arm-64bit",
+    "opencv": "5.0.0",
+    "opencv_threads": 8,
+    "packages": {
+      "numpy": "2.3.3",
+      "Pillow": "13.0.0",
+      "pillow-heif": "1.8.1"
+    }
+  },
+  "source_hashes": {
+    "Tools/run_photo_benchmark.py": "de37ada545ac0967eaefc67923231a9cf736c4fce29035c0afe7f78ff71d46aa",
+    "experiments/src/recall_lens_eval.py": "2db05955678d76a27cbfbf6b40f7f29e3683049723531098a3966512c8544975"
+  },
+  "selected_photos": 641,
+  "decoded_photos": 641,
+  "photos_by_source": {
+    "supplied": 129,
+    "library_hash_sample": 512
+  },
+  "exclusion_counts": {},
+  "stress_by_condition": {
+    "identity_control": {
+      "geometric": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 641,
+        "false_accepts": 0,
+        "true_accept_rate": 1.0,
+        "false_accept_rate": null
+      },
+      "descriptor_support": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 640,
+        "false_accepts": 0,
+        "true_accept_rate": 0.9984399375975039,
+        "false_accept_rate": null
+      }
+    },
+    "dim_45pct": {
+      "geometric": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 632,
+        "false_accepts": 0,
+        "true_accept_rate": 0.9859594383775351,
+        "false_accept_rate": null
+      },
+      "descriptor_support": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 632,
+        "false_accepts": 0,
+        "true_accept_rate": 0.9859594383775351,
+        "false_accept_rate": null
+      }
+    },
+    "blur_sigma3": {
+      "geometric": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 631,
+        "false_accepts": 0,
+        "true_accept_rate": 0.984399375975039,
+        "false_accept_rate": null
+      },
+      "descriptor_support": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 629,
+        "false_accepts": 0,
+        "true_accept_rate": 0.9812792511700468,
+        "false_accept_rate": null
+      }
+    },
+    "rotation25": {
+      "geometric": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 639,
+        "false_accepts": 0,
+        "true_accept_rate": 0.9968798751950078,
+        "false_accept_rate": null
+      },
+      "descriptor_support": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 639,
+        "false_accepts": 0,
+        "true_accept_rate": 0.9968798751950078,
+        "false_accept_rate": null
+      }
+    },
+    "perspective15pct": {
+      "geometric": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 638,
+        "false_accepts": 0,
+        "true_accept_rate": 0.9953198127925117,
+        "false_accept_rate": null
+      },
+      "descriptor_support": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 639,
+        "false_accepts": 0,
+        "true_accept_rate": 0.9968798751950078,
+        "false_accept_rate": null
+      }
+    },
+    "crop65pct": {
+      "geometric": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 633,
+        "false_accepts": 0,
+        "true_accept_rate": 0.9875195007800313,
+        "false_accept_rate": null
+      },
+      "descriptor_support": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 629,
+        "false_accepts": 0,
+        "true_accept_rate": 0.9812792511700468,
+        "false_accept_rate": null
+      }
+    },
+    "occlusion40pct": {
+      "geometric": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 641,
+        "false_accepts": 0,
+        "true_accept_rate": 1.0,
+        "false_accept_rate": null
+      },
+      "descriptor_support": {
+        "trials": 641,
+        "positives": 641,
+        "negatives": 0,
+        "true_accepts": 640,
+        "false_accepts": 0,
+        "true_accept_rate": 0.9984399375975039,
+        "false_accept_rate": null
+      }
+    }
+  },
+  "natural_unique_pairs": 49,
+  "natural_pair_labels": {
+    "different_scene": 42,
+    "same_scene": 7
+  },
+  "natural_same_date_pairs": 12,
+  "natural_directional": {
+    "geometric": {
+      "trials": 98,
+      "positives": 14,
+      "negatives": 84,
+      "true_accepts": 9,
+      "false_accepts": 0,
+      "true_accept_rate": 0.6428571428571429,
+      "false_accept_rate": 0.0
+    },
+    "descriptor_support": {
+      "trials": 98,
+      "positives": 14,
+      "negatives": 84,
+      "true_accepts": 10,
+      "false_accepts": 3,
+      "true_accept_rate": 0.7142857142857143,
+      "false_accept_rate": 0.03571428571428571
+    }
+  },
+  "desktop_pair_compare_ms": {
+    "median": 17.3158,
+    "p95": 18.59635
+  }
+}

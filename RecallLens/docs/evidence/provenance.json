@@ -1,0 +1,17 @@
+{
+  "photo_benchmark": "Results copied from the frozen 2026-10-26 local run; paths and raw photographs excluded.",
+  "pilot": "Recovered from the physical phone; scene labels and strategy text omitted.",
+  "original_pilot_sha256": "20f5254fcab744d48c82862555ab713ccb705bd522fb644928fbc1afc76f9dc0",
+  "private_label_csv_sha256": "241af74ed4384ff7bd8a71befd25695af29644ac0ccf4c7d5e26276c31c9eb64",
+  "files": {
+    "illustrated-cases.json": "0f5d0c8e4ccc718e62bb86eb1cf66c333c4c1363830eae5693830e45ede27a19",
+    "software-checks.json": "2157582623df407031b39dc1dd4f330ed5764ca4e86588c8eddf22ef25ee7b24",
+    "deployed-checks.json": "9f07f0c71cea7f6594895e9a12e6a18ea06003186710e9cc4e5ebecd2a63f638",
+    "pilot.csv": "73fa7c069b15ad77b511b609a12a6588513354deebae224f0d39a83896c0a2dd",
+    "benchmark/summary.json": "ce7021cb36d8b647d827011921af6322606a7e9d6514e117c3fbc8be2e38de88",
+    "benchmark/stress_trials.csv": "59f1c0bb8c4e9dc0e5f11742e2fbcdb7703c919428741cce0f2ca76be616b520",
+    "benchmark/natural_pair_trials.csv": "859d9921455b016ce16cdb359b530776d5af237f30888413dc4818d3d8df9a37",
+    "benchmark/natural_pairs.csv": "0c4a22e2dec2379651f8f9d65f15acc498a3e720d4a9a9054274061424a2354f",
+    "benchmark/protocol.json": "9587086219d90056ee9a60552ee38ab4ab8a95bf11de72fdf48018cfc34361be"
+  }
+}

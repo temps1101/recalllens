@@ -1,0 +1,166 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Ephemeral OpenCV 5 geometric verification for Recall Lens.
+
+Parameters:
+  ApiToken:
+    Type: String
+    NoEcho: true
+    MinLength: 24
+    Description: Shared demo token sent in the x-api-key header.
+  BillingEmail:
+    Type: String
+    AllowedPattern: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+    ConstraintDescription: Enter an email address for AWS cost alerts.
+    Description: Email address that receives the Recall Lens cost alerts.
+
+Resources:
+  VerificationApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: prod
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 2
+        ThrottlingRateLimit: 1
+
+  VerificationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Architectures:
+        - arm64
+      MemorySize: 1024
+      Timeout: 10
+      Environment:
+        Variables:
+          API_TOKEN: !Ref ApiToken
+          REFERENCE_TABLE: !Ref ReferenceTable
+          UNLOCK_THRESHOLD: "0.62"
+          SHARE_BUCKET: !Ref SharedPhotos
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ReferenceTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+              Resource: !Sub "${SharedPhotos.Arn}/shares/*"
+      Events:
+        CreateShare:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref VerificationApi
+            Method: POST
+            Path: /shares
+        ReceiveShare:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref VerificationApi
+            Method: GET
+            Path: /shares/{shareId}
+        ShareLink:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref VerificationApi
+            Method: GET
+            Path: /s/{shareId}
+        Verify:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref VerificationApi
+            Method: POST
+            Path: /verify
+        RegisterReference:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref VerificationApi
+            Method: POST
+            Path: /references
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: .
+      DockerTag: opencv5-v1
+
+  VerificationFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${VerificationFunction}"
+      RetentionInDays: 3
+
+  ReferenceTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: referenceId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: referenceId
+          KeyType: HASH
+      SSESpecification:
+        SSEEnabled: true
+      TimeToLiveSpecification:
+        AttributeName: expiresAt
+        Enabled: true
+
+  SharedPhotos:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpireSharedPhotos
+            Status: Enabled
+            ExpirationInDays: 30
+            Prefix: shares/
+
+  MonthlyCostBudget:
+    Type: AWS::Budgets::Budget
+    Properties:
+      Budget:
+        BudgetName: WeirdBoots-Monthly-Cost
+        BudgetLimit:
+          Amount: 1
+          Unit: USD
+        BudgetType: COST
+        CostTypes:
+          IncludeCredit: false
+          IncludeRefund: false
+        TimeUnit: MONTHLY
+      NotificationsWithSubscribers:
+        - Notification:
+            ComparisonOperator: GREATER_THAN
+            NotificationType: ACTUAL
+            Threshold: 0.10
+            ThresholdType: ABSOLUTE_VALUE
+          Subscribers:
+            - Address: !Ref BillingEmail
+              SubscriptionType: EMAIL
+        - Notification:
+            ComparisonOperator: GREATER_THAN
+            NotificationType: FORECASTED
+            Threshold: 1
+            ThresholdType: ABSOLUTE_VALUE
+          Subscribers:
+            - Address: !Ref BillingEmail
+              SubscriptionType: EMAIL
+
+Outputs:
+  VerificationEndpoint:
+    Description: Configure this URL as WBCloudVerificationURL in the iOS target.
+    Value: !Sub "https://${VerificationApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/prod/verify"

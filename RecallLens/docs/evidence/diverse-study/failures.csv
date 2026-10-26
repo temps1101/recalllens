@@ -1,0 +1,73 @@
+method,pair_id,direction,error,score,threshold,scene_category,visual_observation
+hsv_histogram,new_007,A_to_B,miss,0.343678,0.4376681,object,Matching bus window arrangement and side graphics
+hsv_histogram,new_007,B_to_A,miss,0.343678,0.4376681,object,Matching bus window arrangement and side graphics
+hsv_histogram,new_037,A_to_B,miss,0.427921,0.4376681,architecture,Shared vintage train side and railing geometry
+hsv_histogram,new_037,B_to_A,miss,0.427921,0.4376681,architecture,Shared vintage train side and railing geometry
+hsv_histogram,new_038,A_to_B,miss,0.419053,0.4376681,architecture,Matching train windows doorway and railing despite occlusion
+hsv_histogram,new_038,B_to_A,miss,0.419053,0.4376681,architecture,Matching train windows doorway and railing despite occlusion
+hsv_histogram,new_048,A_to_B,false_accept,0.489385,0.4376681,screen_document,Different printed illustrations and physical presentations
+hsv_histogram,new_048,B_to_A,false_accept,0.489385,0.4376681,screen_document,Different printed illustrations and physical presentations
+hsv_histogram,new_055,A_to_B,false_accept,0.488474,0.4376681,indoor_scene,Dining table and patterned wall versus different glass-front setting
+hsv_histogram,new_055,B_to_A,false_accept,0.488474,0.4376681,indoor_scene,Dining table and patterned wall versus different glass-front setting
+hsv_histogram,new_056,A_to_B,false_accept,0.462406,0.4376681,architecture,Distinct entrance designs and signage without shared structure
+hsv_histogram,new_056,B_to_A,false_accept,0.462406,0.4376681,architecture,Distinct entrance designs and signage without shared structure
+hsv_histogram,new_072,A_to_B,false_accept,0.466945,0.4376681,architecture,Glazed exterior arcade versus interior staircase
+hsv_histogram,new_072,B_to_A,false_accept,0.466945,0.4376681,architecture,Glazed exterior arcade versus interior staircase
+hsv_histogram,new_085,A_to_B,miss,0.315515,0.4376681,architecture,Shared tiered temple roof and front facade from different angles
+hsv_histogram,new_085,B_to_A,miss,0.315515,0.4376681,architecture,Shared tiered temple roof and front facade from different angles
+hsv_histogram,new_088,A_to_B,miss,0.389234,0.4376681,architecture,"Shared temple facade with tiered roof, balcony and entrance; oblique view"
+hsv_histogram,new_088,B_to_A,miss,0.389234,0.4376681,architecture,"Shared temple facade with tiered roof, balcony and entrance; oblique view"
+orb_descriptor_support,new_005,A_to_B,miss,0.027778,0.08333310000000001,architecture,Matching station canopy and building structure
+orb_descriptor_support,new_006,A_to_B,miss,0.055556,0.08333310000000001,object,Bus rear corner and side share structure against consistent facade
+orb_descriptor_support,new_006,B_to_A,miss,0.027778,0.08333310000000001,object,Bus rear corner and side share structure against consistent facade
+orb_descriptor_support,new_037,A_to_B,miss,0.027778,0.08333310000000001,architecture,Shared vintage train side and railing geometry
+orb_descriptor_support,new_037,B_to_A,miss,0.055556,0.08333310000000001,architecture,Shared vintage train side and railing geometry
+orb_descriptor_support,new_038,A_to_B,miss,0.027778,0.08333310000000001,architecture,Matching train windows doorway and railing despite occlusion
+orb_descriptor_support,new_038,B_to_A,miss,0.027778,0.08333310000000001,architecture,Matching train windows doorway and railing despite occlusion
+orb_descriptor_support,new_069,A_to_B,miss,0.055556,0.08333310000000001,architecture,"Shared distinctive glass canopy, column and escalator"
+orb_descriptor_support,new_069,B_to_A,miss,0.027778,0.08333310000000001,architecture,"Shared distinctive glass canopy, column and escalator"
+orb_descriptor_support,new_085,A_to_B,miss,0.0,0.08333310000000001,architecture,Shared tiered temple roof and front facade from different angles
+orb_descriptor_support,new_085,B_to_A,miss,0.0,0.08333310000000001,architecture,Shared tiered temple roof and front facade from different angles
+orb_descriptor_support,new_088,A_to_B,miss,0.027778,0.08333310000000001,architecture,"Shared temple facade with tiered roof, balcony and entrance; oblique view"
+orb_descriptor_support,new_088,B_to_A,miss,0.027778,0.08333310000000001,architecture,"Shared temple facade with tiered roof, balcony and entrance; oblique view"
+orb_ransac,new_005,A_to_B,miss,0.0075,0.0225001,architecture,Matching station canopy and building structure
+orb_ransac,new_006,A_to_B,miss,0.015,0.0225001,object,Bus rear corner and side share structure against consistent facade
+orb_ransac,new_006,B_to_A,miss,0.0075,0.0225001,object,Bus rear corner and side share structure against consistent facade
+orb_ransac,new_037,A_to_B,miss,0.0075,0.0225001,architecture,Shared vintage train side and railing geometry
+orb_ransac,new_037,B_to_A,miss,0.015,0.0225001,architecture,Shared vintage train side and railing geometry
+orb_ransac,new_038,A_to_B,miss,0.0075,0.0225001,architecture,Matching train windows doorway and railing despite occlusion
+orb_ransac,new_038,B_to_A,miss,0.0075,0.0225001,architecture,Matching train windows doorway and railing despite occlusion
+orb_ransac,new_069,A_to_B,miss,0.015,0.0225001,architecture,"Shared distinctive glass canopy, column and escalator"
+orb_ransac,new_069,B_to_A,miss,0.0075,0.0225001,architecture,"Shared distinctive glass canopy, column and escalator"
+orb_ransac,new_085,A_to_B,miss,0.0,0.0225001,architecture,Shared tiered temple roof and front facade from different angles
+orb_ransac,new_085,B_to_A,miss,0.0,0.0225001,architecture,Shared tiered temple roof and front facade from different angles
+orb_ransac,new_088,A_to_B,miss,0.0075,0.0225001,architecture,"Shared temple facade with tiered roof, balcony and entrance; oblique view"
+orb_ransac,new_088,B_to_A,miss,0.0075,0.0225001,architecture,"Shared temple facade with tiered roof, balcony and entrance; oblique view"
+sift_ransac,new_037,A_to_B,miss,0.0375,0.3483961,architecture,Shared vintage train side and railing geometry
+sift_ransac,new_037,B_to_A,miss,0.015,0.3483961,architecture,Shared vintage train side and railing geometry
+sift_ransac,new_038,A_to_B,miss,0.03,0.3483961,architecture,Matching train windows doorway and railing despite occlusion
+sift_ransac,new_038,B_to_A,miss,0.03,0.3483961,architecture,Matching train windows doorway and railing despite occlusion
+sift_ransac,new_045,A_to_B,false_accept,0.3901,0.3483961,mixed,Book pages versus backpack close-up
+sift_ransac,new_055,A_to_B,false_accept,0.358615,0.3483961,indoor_scene,Dining table and patterned wall versus different glass-front setting
+sift_ransac,new_069,A_to_B,miss,0.346489,0.3483961,architecture,"Shared distinctive glass canopy, column and escalator"
+sift_ransac,new_072,B_to_A,false_accept,0.4125,0.3483961,architecture,Glazed exterior arcade versus interior staircase
+sift_ransac,new_085,A_to_B,miss,0.0375,0.3483961,architecture,Shared tiered temple roof and front facade from different angles
+sift_ransac,new_085,B_to_A,miss,0.015,0.3483961,architecture,Shared tiered temple roof and front facade from different angles
+sift_ransac,new_088,A_to_B,miss,0.015,0.3483961,architecture,"Shared temple facade with tiered roof, balcony and entrance; oblique view"
+sift_ransac,new_088,B_to_A,miss,0.03,0.3483961,architecture,"Shared temple facade with tiered roof, balcony and entrance; oblique view"
+deployed_anchor,new_005,A_to_B,miss,0.435084,0.62,architecture,Matching station canopy and building structure
+deployed_anchor,new_005,B_to_A,miss,0.439387,0.62,architecture,Matching station canopy and building structure
+deployed_anchor,new_006,A_to_B,miss,0.425007,0.62,object,Bus rear corner and side share structure against consistent facade
+deployed_anchor,new_006,B_to_A,miss,0.381548,0.62,object,Bus rear corner and side share structure against consistent facade
+deployed_anchor,new_007,A_to_B,miss,0.546276,0.62,object,Matching bus window arrangement and side graphics
+deployed_anchor,new_037,A_to_B,miss,0.307755,0.62,architecture,Shared vintage train side and railing geometry
+deployed_anchor,new_037,B_to_A,miss,0.203237,0.62,architecture,Shared vintage train side and railing geometry
+deployed_anchor,new_038,A_to_B,miss,0.189649,0.62,architecture,Matching train windows doorway and railing despite occlusion
+deployed_anchor,new_038,B_to_A,miss,0.347808,0.62,architecture,Matching train windows doorway and railing despite occlusion
+deployed_anchor,new_046,B_to_A,miss,0.595483,0.62,object,Same distinctive illustrated standee and wall arrangement
+deployed_anchor,new_069,A_to_B,miss,0.323958,0.62,architecture,"Shared distinctive glass canopy, column and escalator"
+deployed_anchor,new_069,B_to_A,miss,0.305352,0.62,architecture,"Shared distinctive glass canopy, column and escalator"
+deployed_anchor,new_085,A_to_B,miss,0.0525,0.62,architecture,Shared tiered temple roof and front facade from different angles
+deployed_anchor,new_085,B_to_A,miss,0.329296,0.62,architecture,Shared tiered temple roof and front facade from different angles
+deployed_anchor,new_088,A_to_B,miss,0.03,0.62,architecture,"Shared temple facade with tiered roof, balcony and entrance; oblique view"
+deployed_anchor,new_088,B_to_A,miss,0.4308,0.62,architecture,"Shared temple facade with tiered roof, balcony and entrance; oblique view"

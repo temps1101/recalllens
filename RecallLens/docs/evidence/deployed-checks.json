@@ -1,0 +1,43 @@
+{
+  "checked_utc": "2026-10-26T03:09:03.655681+00:00",
+  "stack_status": "UPDATE_COMPLETE",
+  "function_last_modified": "2026-10-26T03:06:31.000+0000",
+  "fixture": "procedural image, not a user photograph",
+  "checks": [
+    {
+      "check": "register_procedural_signature",
+      "passed": true,
+      "http_status": 201,
+      "round_trip_ms": 269.12
+    },
+    {
+      "check": "matching_image_authorized",
+      "passed": true,
+      "http_status": 200,
+      "round_trip_ms": 230.49,
+      "diagnostics": {
+        "similarity": 1.0,
+        "goodMatches": 1594,
+        "inliers": 1594,
+        "engine": "OpenCV 5.0.0 ORB + RANSAC",
+        "imagesRetained": false,
+        "durationMs": 113.03
+      }
+    },
+    {
+      "check": "wrong_token_rejected",
+      "passed": true,
+      "http_status": 401,
+      "round_trip_ms": 114.96
+    },
+    {
+      "check": "expired_signature_rejected_before_ttl_cleanup",
+      "passed": true,
+      "item_still_present_before_verify": true,
+      "http_status": 404,
+      "round_trip_ms": 176.18
+    }
+  ],
+  "test_reference_deleted": true,
+  "all_passed": true
+}

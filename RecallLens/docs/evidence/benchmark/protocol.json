@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "threshold": 0.62,
+  "seed": 20261026,
+  "conditions": [
+    "identity_control",
+    "dim_45pct",
+    "blur_sigma3",
+    "rotation25",
+    "perspective15pct",
+    "crop65pct",
+    "occlusion40pct"
+  ],
+  "methods": {
+    "geometric": "Unchanged ORB + RANSAC score, threshold 0.62",
+    "descriptor_support": "Ablation: min(ratio-test matches / 36, 1), threshold 0.62; not independently calibrated"
+  },
+  "sampling": "All supplied reference stills plus up to 512 locally available valid-GPS library originals, ordered by SHA256(UUID), exact-file deduplicated before scoring",
+  "limitations": [
+    "Synthetic transformations are not new captures or revisit trials",
+    "Human pair labels were selected through the production matcher and are exploratory",
+    "Bidirectional results share the same pair; they are not independent observations",
+    "Desktop pair verification excludes camera, temporal stabilization, network and retrieval ranking",
+    "Different photographs are not automatically labeled as different scenes"
+  ],
+  "library_count_requested": 512,
+  "started_utc": "2026-10-26T00:59:26.168293+00:00"
+}

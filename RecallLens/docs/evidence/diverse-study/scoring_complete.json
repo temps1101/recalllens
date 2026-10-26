@@ -1,0 +1,9 @@
+{
+  "unique_images": 144,
+  "pairs": 96,
+  "configs": 34,
+  "tune_rows": 3264,
+  "sealed_test_rows": 3264,
+  "opencv_version": "5.0.0",
+  "scoring_script_sha256": "3281f1a07c88462d0d634af9e7d3ee16dffb731ab1defe003f54b6daac4cdde2"
+}

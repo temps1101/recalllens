@@ -1,0 +1,97 @@
+pair_id,label,review_status,reviewer,scene_category,notes,primary_label,worker_label
+new_001,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Ground and path versus tree canopy; no identifiable shared structure,different_scene,different_scene
+new_002,uncertain,unresolved,two_AI_visual_passes_not_human,people_dominant,People dominate; foliage alone is insufficient for scene correspondence,uncertain,uncertain
+new_003,uncertain,unresolved,two_AI_visual_passes_not_human,nature,Branch close-up versus trunk view; shared persistent detail not established,uncertain,uncertain
+new_004,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Paved ground versus woodland portrait; no identifiable overlap,different_scene,different_scene
+new_005,same_scene,confirmed,two_AI_visual_passes_not_human,architecture,Matching station canopy and building structure,same_scene,same_scene
+new_006,same_scene,confirmed,two_AI_visual_passes_not_human,object,Bus rear corner and side share structure against consistent facade,same_scene,same_scene
+new_007,same_scene,confirmed,two_AI_visual_passes_not_human,object,Matching bus window arrangement and side graphics,same_scene,same_scene
+new_008,uncertain,unresolved,two_AI_visual_passes_not_human,object,Wide rear view versus close side; overlap difficult to establish,uncertain,uncertain
+new_009,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Outdoor menu sign versus meal; no shared structure,different_scene,different_scene
+new_010,same_scene,confirmed,two_AI_visual_passes_not_human,indoor_scene,Matching window lattice table and condiment layout; people are not identification basis,same_scene,same_scene
+new_011,same_scene,confirmed,two_AI_visual_passes_not_human,indoor_scene,Shared table and distinctive window-wall arrangement at changed angle,same_scene,same_scene
+new_012,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Outdoor sign versus dining room,different_scene,different_scene
+new_013,uncertain,unresolved,two_AI_visual_passes_not_human,mixed,First image is effectively featureless and cannot support a scene judgment,uncertain,different_scene
+new_014,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Vehicle cabin versus receipt in shop,different_scene,different_scene
+new_015,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Ticket machine close-up versus outdoor canopy,different_scene,different_scene
+new_016,uncertain,unresolved,two_AI_visual_passes_not_human,mixed,First image is featureless; correspondence cannot be established,uncertain,different_scene
+new_017,uncertain,unresolved,two_AI_visual_passes_not_human,mixed,Meal tabletop versus portrait against wooden wall without clear common structure,different_scene,uncertain
+new_018,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Promotional standee versus handwritten document,different_scene,different_scene
+new_019,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Cafe table scene versus parked bicycles,different_scene,different_scene
+new_020,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Meal tabletop versus parked bicycles,different_scene,different_scene
+new_021,uncertain,unresolved,two_AI_visual_passes_not_human,indoor_scene,Food-court furniture but shared physical details are not sufficiently identifiable,uncertain,different_scene
+new_022,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Meal table versus character display,different_scene,different_scene
+new_023,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Character display versus toy construction,different_scene,different_scene
+new_024,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Dining seats versus toy construction,different_scene,different_scene
+new_025,uncertain,unresolved,two_AI_visual_passes_not_human,mixed,Night market wide view and portrait background lack clearly shared identifiable detail,uncertain,uncertain
+new_026,same_scene,confirmed,two_AI_visual_passes_not_human,indoor_scene,Shared tree trunk and market-stall setting; not based on people identity,same_scene,same_scene
+new_027,uncertain,unresolved,two_AI_visual_passes_not_human,architecture,Night-market views but no sufficiently identifiable common facade detail,uncertain,uncertain
+new_028,uncertain,unresolved,two_AI_visual_passes_not_human,architecture,Different framing in market; shared structure not established,uncertain,uncertain
+new_029,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Packaged object versus auditorium,different_scene,different_scene
+new_030,different_scene,confirmed,two_AI_visual_passes_not_human,indoor_scene,Auditorium versus corridor column,different_scene,different_scene
+new_031,different_scene,confirmed,two_AI_visual_passes_not_human,indoor_scene,Auditorium wall versus corridor without identifiable overlapping structure,different_scene,different_scene
+new_032,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Packaged object versus corridor,different_scene,different_scene
+new_033,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Pavement and bird versus decorative knob,different_scene,different_scene
+new_034,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Floor versus printed brochure,different_scene,different_scene
+new_035,different_scene,confirmed,two_AI_visual_passes_not_human,architecture,Train side and roof versus indoor wall,different_scene,different_scene
+new_036,uncertain,unresolved,two_AI_visual_passes_not_human,architecture,Repeated floor tiles alone are insufficient to identify a shared scene,uncertain,different_scene
+new_037,same_scene,confirmed,two_AI_visual_passes_not_human,architecture,Shared vintage train side and railing geometry,same_scene,same_scene
+new_038,same_scene,confirmed,two_AI_visual_passes_not_human,architecture,Matching train windows doorway and railing despite occlusion,same_scene,same_scene
+new_039,uncertain,unresolved,two_AI_visual_passes_not_human,architecture,Severe blur obscures correspondence in second view,uncertain,uncertain
+new_040,uncertain,unresolved,two_AI_visual_passes_not_human,architecture,Severe blur prevents reliable shared-detail judgment,uncertain,uncertain
+new_041,uncertain,unresolved,two_AI_visual_passes_not_human,indoor_scene,Shared seating railing and audience-area layout; no identity comparison,same_scene,uncertain
+new_042,same_scene,confirmed,two_AI_visual_passes_not_human,nature,Shared waterfront horizon barrier and viewing area beneath changing fireworks,same_scene,same_scene
+new_043,same_scene,confirmed,two_AI_visual_passes_not_human,nature,Shared shoreline silhouette viewing-area sign and horizon geometry,same_scene,same_scene
+new_044,uncertain,unresolved,two_AI_visual_passes_not_human,mixed,Audience-facing portrait versus outward waterfront; no identifiable shared structure,different_scene,uncertain
+new_045,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Book pages versus backpack close-up,different_scene,different_scene
+new_046,same_scene,confirmed,two_AI_visual_passes_not_human,object,Same distinctive illustrated standee and wall arrangement,same_scene,same_scene
+new_047,same_scene,confirmed,two_AI_visual_passes_not_human,object,Matching standee wall and floor; foreground pose changes,same_scene,same_scene
+new_048,different_scene,confirmed,two_AI_visual_passes_not_human,screen_document,Different printed illustrations and physical presentations,different_scene,different_scene
+new_049,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Outdoor street versus tabletop meal,different_scene,different_scene
+new_050,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Meal versus classroom blackboard,different_scene,different_scene
+new_051,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Indoor group photo versus metal utility door,different_scene,different_scene
+new_052,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Outdoor street versus utility door,different_scene,different_scene
+new_053,uncertain,unresolved,two_AI_visual_passes_not_human,indoor_scene,Cafe entrance and corridor; shared distinctive structure not established,uncertain,uncertain
+new_054,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Key close-up versus meal table,different_scene,different_scene
+new_055,different_scene,confirmed,two_AI_visual_passes_not_human,indoor_scene,Dining table and patterned wall versus different glass-front setting,different_scene,different_scene
+new_056,different_scene,confirmed,two_AI_visual_passes_not_human,architecture,Distinct entrance designs and signage without shared structure,different_scene,different_scene
+new_057,same_scene,confirmed,two_AI_visual_passes_not_human,architecture,"Shared bridge, riverbank and building geometry; people not used for identity",same_scene,same_scene
+new_058,same_scene,confirmed,two_AI_visual_passes_not_human,architecture,"Shared bridge, riverbank and building geometry; people not used for identity",same_scene,same_scene
+new_059,same_scene,confirmed,two_AI_visual_passes_not_human,architecture,"Shared bridge, riverbank and building geometry; people not used for identity",same_scene,same_scene
+new_060,same_scene,confirmed,two_AI_visual_passes_not_human,architecture,"Shared bridge, riverbank and building geometry; people not used for identity",same_scene,same_scene
+new_061,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Bus exterior versus railway platform,different_scene,different_scene
+new_062,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Cycle sign versus railway platform,different_scene,different_scene
+new_063,uncertain,unresolved,two_AI_visual_passes_not_human,architecture,Station views with no identifiable common structure in thumbnails,uncertain,different_scene
+new_064,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Bus exterior versus staircase,different_scene,different_scene
+new_065,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Night station exterior versus train cabin,different_scene,different_scene
+new_066,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Train nose versus shop front,different_scene,different_scene
+new_067,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Poster wall versus platform shop,different_scene,different_scene
+new_068,different_scene,confirmed,two_AI_visual_passes_not_human,architecture,City buildings seen from station versus inward platform,different_scene,different_scene
+new_069,same_scene,confirmed,two_AI_visual_passes_not_human,architecture,"Shared distinctive glass canopy, column and escalator",same_scene,same_scene
+new_070,different_scene,confirmed,two_AI_visual_passes_not_human,architecture,Green spiral stair versus concrete landing,different_scene,different_scene
+new_071,different_scene,confirmed,two_AI_visual_passes_not_human,architecture,Outdoor sculpture versus interior staircase,different_scene,different_scene
+new_072,different_scene,confirmed,two_AI_visual_passes_not_human,architecture,Glazed exterior arcade versus interior staircase,different_scene,different_scene
+new_073,uncertain,unresolved,two_AI_visual_passes_not_human,indoor_scene,Barbecue context shared but grill identity not established,uncertain,uncertain
+new_074,uncertain,unresolved,two_AI_visual_passes_not_human,object,"Grill close-up versus fire obscured grill, no clear persistent match",uncertain,uncertain
+new_075,uncertain,unresolved,two_AI_visual_passes_not_human,mixed,Hand close-up versus landscape portrait,different_scene,uncertain
+new_076,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Indoor grill versus field,different_scene,different_scene
+new_077,different_scene,confirmed,two_AI_visual_passes_not_human,nature,Sculpture garden versus outward waterfront,different_scene,different_scene
+new_078,same_scene,confirmed,two_AI_visual_passes_not_human,architecture,"Shared waterfront railing, paving, ring and bridge",same_scene,same_scene
+new_079,same_scene,confirmed,two_AI_visual_passes_not_human,object,Shared colorful sculpture and surrounding tree,same_scene,same_scene
+new_080,same_scene,confirmed,two_AI_visual_passes_not_human,object,"Shared sculpture, tree and vegetation",same_scene,same_scene
+new_081,different_scene,confirmed,two_AI_visual_passes_not_human,indoor_scene,Desk area versus stairwell,different_scene,different_scene
+new_082,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Bottle versus computer screen,different_scene,different_scene
+new_083,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Plant pots versus screen,different_scene,different_scene
+new_084,different_scene,confirmed,two_AI_visual_passes_not_human,screen_document,"Room view versus changing screen content, no shared persistent structure established",different_scene,different_scene
+new_085,same_scene,confirmed,two_AI_visual_passes_not_human,architecture,Shared tiered temple roof and front facade from different angles,same_scene,same_scene
+new_086,uncertain,unresolved,two_AI_visual_passes_not_human,architecture,"Temple exterior versus interior doorway, no clear overlap",uncertain,uncertain
+new_087,same_scene,confirmed,two_AI_visual_passes_not_human,architecture,"Shared curved roof, curtains, columns and steps",same_scene,same_scene
+new_088,same_scene,confirmed,two_AI_visual_passes_not_human,architecture,"Shared temple facade with tiered roof, balcony and entrance; oblique view",same_scene,same_scene
+new_089,uncertain,unresolved,two_AI_visual_passes_not_human,architecture,Park views have distant buildings but shared facade cannot be established at contact-sheet resolution,uncertain,different_scene
+new_090,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Park wide view versus face close-up,different_scene,different_scene
+new_091,same_scene,confirmed,two_AI_visual_passes_not_human,nature,"Shared field, slide and distant rail structures at night",same_scene,same_scene
+new_092,different_scene,confirmed,two_AI_visual_passes_not_human,nature,Playground climbing bars versus opposite field and slide,different_scene,different_scene
+new_093,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Street exterior versus food,different_scene,different_scene
+new_094,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Room portrait versus document,different_scene,different_scene
+new_095,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Mirror room versus clothing close-up,different_scene,different_scene
+new_096,different_scene,confirmed,two_AI_visual_passes_not_human,mixed,Street versus clothing close-up,different_scene,different_scene

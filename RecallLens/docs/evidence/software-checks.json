@@ -1,0 +1,24 @@
+{
+  "checked_on": "2026-10-26",
+  "lambda_unit_tests": {
+    "passed": 5
+  },
+  "evaluator_tests": {
+    "passed": 3
+  },
+  "swift_stabilizer_regression_checks": "passed",
+  "procedural_evaluator_smoke": {
+    "positive_queries": 3,
+    "negative_queries": 1,
+    "correct": 4
+  },
+  "release_simulator_build": "passed",
+  "debug_physical_device_build": "passed",
+  "archive_extracted_clean_release_build": "passed, using existing pinned OpenCV framework cache",
+  "archive_chart_regeneration": "passed",
+  "updated_phone_app": "installed and launched",
+  "photo_index_entries_preserved": 7,
+  "evaluation_samples_preserved": 6,
+  "recorded_physical_camera_transition_test": "not performed in this run",
+  "benchmark_source_hashes_match": true
+}

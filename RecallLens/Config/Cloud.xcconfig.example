@@ -1,0 +1,4 @@
+// Copy this file to Cloud.xcconfig after deploying the AWS verifier.
+// Use a short-lived demonstration token and rotate it after judging.
+WB_CLOUD_VERIFICATION_URL = https:/$()/example.execute-api.region.amazonaws.com/prod/verify
+WB_CLOUD_VERIFICATION_TOKEN =

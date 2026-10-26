@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-26",
+  "device": "iPhone 17 (development device)",
+  "device_build": "Debug build succeeded and installed",
+  "simulator_build": "Debug x86_64 build succeeded; simulator runtime could not complete app launch, so no simulator UI pass claimed",
+  "server_unit_tests_passed": 10,
+  "swift_checks": [
+    "Share URL validation and legacy record decoding",
+    "Match stabilization and authorization",
+    "Feature signature parsing and capture threshold boundaries",
+    "Built bundle: English/Japanese actions, receipt label, permission text and preferred-locale selection"
+  ],
+  "device_persistence": {
+    "previous_photo_ids_preserved": true,
+    "owner_photos_after_user_captures": 9,
+    "received_photos": 1,
+    "copies_of_same_received_share_after_reopen": 1,
+    "received_features_saved": true
+  },
+  "registration_recovery": {
+    "owner_references_checked": 8,
+    "present_in_dynamodb": 8,
+    "note": "Checked after the registration timeout/retry fix; the user subsequently took another photo. No image contents or link IDs included."
+  },
+  "user_observation_before_final_ui_revision": {
+    "received_badge_appeared_at_matching_scene": true,
+    "badge_disappeared_when_turned_away": true,
+    "viewer_auto_dismissed": true
+  },
+  "final_ui_revision": {
+    "viewer_behavior": "Snapshots matching photos on explicit open; remains until manual close",
+    "matching_previews": "One representative thumbnail beside the shutter; provenance shown inside the viewer",
+    "capture_readiness": "Local periodic feature check; disabled capture and inline guidance below 8 keypoints",
+    "device_build_installed": true,
+    "user_confirmation": "Manual-close behavior and inline capture readiness confirmed by the user. The earlier two-preview layout was rejected and replaced by one thumbnail; the replacement is built and installed."
+  },
+  "capture_review_and_localization": {
+    "device_build_installed_and_launched": true,
+    "translation_keys_checked": 56,
+    "flow": "In-memory capture review with Save / Share / Discard",
+    "user_confirmation": "Not yet collected for this revision; no English device UI inspection claimed"
+  }
+}

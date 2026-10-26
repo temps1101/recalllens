@@ -1,0 +1,64 @@
+{
+  "provenance": "Two AI visual passes on contact sheets; no human validation. Primary assistant saw a summary of worker uncertainties before completing its last 24 pairs, but not worker row labels or algorithm scores. Passes are not statistically independent.",
+  "inclusion_rule": "Only agreement on same_scene/different_scene; either uncertain or disagreement excluded. Frozen before tuning/test score interpretation.",
+  "pairs": 96,
+  "included": 74,
+  "excluded": 22,
+  "disagreements": [
+    {
+      "pair_id": "new_013",
+      "primary": "uncertain",
+      "worker": "different_scene"
+    },
+    {
+      "pair_id": "new_016",
+      "primary": "uncertain",
+      "worker": "different_scene"
+    },
+    {
+      "pair_id": "new_017",
+      "primary": "different_scene",
+      "worker": "uncertain"
+    },
+    {
+      "pair_id": "new_021",
+      "primary": "uncertain",
+      "worker": "different_scene"
+    },
+    {
+      "pair_id": "new_036",
+      "primary": "uncertain",
+      "worker": "different_scene"
+    },
+    {
+      "pair_id": "new_041",
+      "primary": "same_scene",
+      "worker": "uncertain"
+    },
+    {
+      "pair_id": "new_044",
+      "primary": "different_scene",
+      "worker": "uncertain"
+    },
+    {
+      "pair_id": "new_063",
+      "primary": "uncertain",
+      "worker": "different_scene"
+    },
+    {
+      "pair_id": "new_075",
+      "primary": "different_scene",
+      "worker": "uncertain"
+    },
+    {
+      "pair_id": "new_089",
+      "primary": "uncertain",
+      "worker": "different_scene"
+    }
+  ],
+  "counts": {
+    "same_scene": 24,
+    "different_scene": 50,
+    "uncertain": 22
+  }
+}

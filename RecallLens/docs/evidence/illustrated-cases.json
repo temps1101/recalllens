@@ -1,0 +1,38 @@
+[
+  {
+    "pair_id": "pair_043",
+    "title": "Successful match: changed contents, shared counter structure",
+    "label": "same_scene",
+    "capture_interval_seconds": 2.192025,
+    "forward_score": 0.811515,
+    "reverse_score": 0.86885,
+    "selection": "Illustrative outcome categories, not a new accuracy sample"
+  },
+  {
+    "pair_id": "pair_046",
+    "title": "Successful match: changed angle and illumination",
+    "label": "same_scene",
+    "capture_interval_seconds": 40.638072,
+    "forward_score": 0.788618,
+    "reverse_score": 0.783624,
+    "selection": "Illustrative outcome categories, not a new accuracy sample"
+  },
+  {
+    "pair_id": "pair_045",
+    "title": "Missed match: close-up versus whole-object view",
+    "label": "same_scene",
+    "capture_interval_seconds": 15.855516,
+    "forward_score": 0.045,
+    "reverse_score": 0.416389,
+    "selection": "Illustrative outcome categories, not a new accuracy sample"
+  },
+  {
+    "pair_id": "pair_044",
+    "title": "Correct rejection: same location group, different visible subjects",
+    "label": "different_scene",
+    "capture_interval_seconds": 655.47964,
+    "forward_score": 0.310783,
+    "reverse_score": 0.0375,
+    "selection": "Illustrative outcome categories, not a new accuracy sample"
+  }
+]

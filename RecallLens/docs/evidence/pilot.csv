@@ -1,0 +1,7 @@
+recorded_at,expected_match,actual_match,local_ms,aws_round_trip_ms,aws_compute_ms,aws_status,aws_authorized,aws_reference_registered
+2026-10-20T07:33:04.169Z,true,true,55.624,330.023,167.940,verified,true,true
+2026-10-20T07:33:22.315Z,false,false,52.507,311.761,181.130,verified,false,true
+2026-10-20T07:33:32.948Z,false,false,58.894,296.104,135.150,verified,false,true
+2026-10-20T07:33:41.866Z,false,false,49.483,443.198,189.910,verified,false,true
+2026-10-20T07:33:59.099Z,true,true,58.418,518.281,257.600,verified,true,true
+2026-10-20T07:34:08.201Z,false,false,36.925,0.000,0.000,not_attempted,false,true
