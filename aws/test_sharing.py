@@ -65,9 +65,14 @@ class SharingTests(unittest.TestCase):
 
     def test_landing_follows_japanese_or_english_language_preference(self):
         created = self.create()
-        for language, text in [('ja-JP, en;q=0.8', '写真を受け取る'), ('en-US, ja;q=0.8', 'Receive a photo')]:
+        for language, text, lang in [('ja-JP, en;q=0.8', '写真を受け取りました。', 'ja'),
+                                     ('en-US, ja;q=0.8', 'Photo received.', 'en')]:
             event = {'rawPath': '/prod/s/'+created['shareId'], 'requestContext': {'http': {'method': 'GET'}}, 'headers': {'accept-language': language}}
-            self.assertIn(text, handler.lambda_handler(event, None)['body'])
+            body = handler.lambda_handler(event, None)['body']
+            self.assertIn(text, body)
+            self.assertIn(f'<html lang="{lang}">', body)
+            self.assertNotIn('border-radius', body)
+            self.assertNotIn('background:', body)
 
     def test_invalid_missing_and_oversized_requests(self):
         self.assertEqual(self.request('/shares/'+'x'*32)['statusCode'], 404)
