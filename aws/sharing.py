@@ -94,23 +94,30 @@ def handle(event, path, method, upload_authorized):
     token = match[2]
     if match[1] == 's':
         # Link previews never contain the shared photo or its retrieval endpoint.
-        html = '''<!doctype html><html lang="ja"><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><title>Recalllens — 写真を受け取る</title>
-<style>body{background:#101c20;color:#eef6f4;font-family:system-ui;max-width:420px;margin:18vh auto;padding:28px;text-align:center}a{display:block;background:#80e2c3;color:#102721;padding:18px;border-radius:18px;text-decoration:none;font-weight:600}p{line-height:1.8;color:#bdd0cc}</style>
-<h1>風景に、写真が届いています。</h1><p>Recalllensで受け取ると、その風景にカメラを向けたときに写真が現れます。</p>
-<a href="recalllens://receive/TOKEN">Recalllensで受け取る</a>
-<p>アプリがインストールされたiPhoneで開いてください。開かない場合は上のボタンを押してください。</p>
-<script>if(/iPhone|iPad|iPod/.test(navigator.userAgent)){location.href='recalllens://receive/TOKEN';}</script></html>'''.replace('TOKEN', token)
         language = {str(k).lower(): str(v) for k, v in (event.get('headers') or {}).items()}.get('accept-language', '').split(',')[0].lower()
-        if not language.startswith('ja'):
-            for japanese, english in {
-                'lang="ja"': 'lang="en"', '写真を受け取る': 'Receive a photo',
-                '風景に、写真が届いています。': 'A photo is waiting in this scene.',
-                'Recalllensで受け取ると、その風景にカメラを向けたときに写真が現れます。': 'Receive it in Recalllens, then point your camera at the matching scene to reveal it.',
-                'Recalllensで受け取る': 'Receive in Recalllens',
-                'アプリがインストールされたiPhoneで開いてください。開かない場合は上のボタンを押してください。': 'Open on an iPhone with Recalllens installed. If the app does not open automatically, tap the button above.'
-            }.items(): html = html.replace(japanese, english)
+        copy = ({
+            'lang': 'ja',
+            'title': 'Recalllens — 写真を受け取る',
+            'heading': '写真を受け取りました。',
+            'description': 'この写真は、撮影された風景にカメラを向けると表示されます。',
+            'action': 'Recalllensで開く',
+            'note': 'Recalllensが入ったiPhoneで開いてください。'
+        } if language.startswith('ja') else {
+            'lang': 'en',
+            'title': 'Recalllens — Receive a photo',
+            'heading': 'Photo received.',
+            'description': 'Point your camera at the scene where it was taken to reveal it.',
+            'action': 'Open in Recalllens',
+            'note': 'Open this link on an iPhone with Recalllens installed.'
+        })
+        html = '''<!doctype html><html lang="{lang}"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>{title}</title>
+<style>body{{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;max-width:32rem;margin:16vh auto;padding:0 24px;line-height:1.5}}h1{{font-size:1.75rem;line-height:1.2;margin:0 0 16px}}p{{margin:0 0 28px}}a{{color:inherit}}small{{display:block;margin-top:32px}}</style></head>
+<body><main><h1>{heading}</h1><p>{description}</p>
+<a href="recalllens://receive/TOKEN">{action}</a>
+<small>{note}</small></main>
+<script>if(/iPhone|iPad|iPod/.test(navigator.userAgent)){{location.href='recalllens://receive/TOKEN';}}</script></body></html>'''.format(**copy).replace('TOKEN', token)
         return {'statusCode': 200, 'headers': {'content-type': 'text/html; charset=utf-8',
             'cache-control': 'no-store', 'referrer-policy': 'no-referrer', 'x-content-type-options': 'nosniff',
             'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; frame-ancestors 'none'"}, 'body': html}
